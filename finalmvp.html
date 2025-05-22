@@ -1,0 +1,2716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hectar AI: The Future of Agri-Trading - MVP Showcase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;505;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --primary-dark-blue: #0056b3;
+            --text-dark: #343a40;
+            --text-light: #6c757d;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border-light: #dee2e6;
+            --red-alert: #dc3545;
+            --orange-warning: #fd7e14;
+            --yellow-neutral: #ffc107;
+            --green-positive: #28a745;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+            --padding-md: 20px;
+            --padding-sm: 15px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+
+        #app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- Login Page --- */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: var(--padding-md);
+            background-color: var(--primary-blue);
+        }
+
+        .login-box {
+            background-color: var(--bg-white);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px var(--shadow-light);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        .login-box h2 {
+            margin-bottom: 25px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .login-box p.tagline {
+            color: var(--text-light);
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="password"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"],
+        .form-group input[type="number"] { /* Added number type for consistency */
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: var(--bg-white);
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark-blue);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            border: 1px solid var(--border-light);
+            width: 100%;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border-light);
+            transform: translateY(-1px);
+        }
+
+        .login-error {
+            color: var(--red-alert);
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+        /* --- Main App Layout --- */
+        .app-container {
+            display: none; /* Hidden by default, shown after login */
+            width: 100%;
+            display: flex;
+            background-color: var(--bg-light);
+        }
+
+        .sidebar {
+            width: 250px; /* Fixed width */
+            flex-shrink: 0; /* Prevent shrinking */
+            background-color: var(--bg-white);
+            padding: var(--padding-md) 0;
+            box-shadow: 2px 0 10px var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar-logo img {
+            width: 120px;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 0 15px;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .sidebar-nav a:hover {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        .sidebar-nav a.active {
+            background-color: var(--primary-blue);
+            color: var(--bg-white);
+            font-weight: 500;
+        }
+
+        .sidebar-nav a.active:hover {
+            background-color: var(--primary-dark-blue);
+            color: var(--bg-white);
+        }
+
+        .sidebar-nav a i {
+            margin-right: 15px;
+            font-size: 1.1em;
+            width: 20px; /* Ensure consistent icon alignment */
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 15px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .sidebar-footer button {
+            width: 100%;
+            background-color: var(--red-alert);
+            color: var(--bg-white);
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .sidebar-footer button:hover {
+            background-color: #c82333;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: var(--padding-md);
+            overflow-y: auto; /* Changed from scroll to auto */
+        }
+
+        .page-header {
+            margin-bottom: var(--padding-md);
+            padding-bottom: var(--padding-sm);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-header h1 {
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+
+        /* --- Widgets Grid (Dashboard) --- */
+        .widgets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--padding-md);
+            margin-bottom: var(--padding-md);
+        }
+        @media (min-width: 1200px) {
+            .widgets-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .widget {
+            background-color: var(--bg-white);
+            padding: var(--padding-sm);
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .widget-header h3 {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .widget-content {
+            flex-grow: 1;
+        }
+
+        .widget-footer {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-light);
+            font-size: 0.85em;
+            color: var(--text-light);
+            text-align: right;
+        }
+
+        /* MTM Snapshot Widget */
+        .mtm-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+        }
+        .mtm-value.negative {
+            color: var(--red-alert);
+        }
+        .mtm-trend-sparkline {
+            height: 50px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 0.9em;
+        }
+
+        /* Arbitrage Opportunities Widget (Dashboard Table) */
+        .arbitrage-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        .arbitrage-table th, .arbitrage-table td {
+            border: 1px solid var(--border-light);
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .arbitrage-table th {
+            background-color: var(--bg-light);
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .arbitrage-table .margin {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        .arbitrage-table .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8em;
+        }
+
+        /* Risk Alerts Widget */
+        .risk-alert {
+            background-color: #fff3cd;
+            border: 1px solid var(--orange-warning);
+            color: var(--orange-warning);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: flex-start;
+        }
+        .risk-alert.high {
+            background-color: #f8d7da;
+            border-color: var(--red-alert);
+            color: var(--red-alert);
+        }
+        .risk-alert i {
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        /* Market Sentiment Widget (Dashboard) */
+        .sentiment-gauge-container { /* Shared with S&D Drivers */
+            margin-bottom: 10px;
+            border: 1px solid transparent;
+            padding: 5px;
+            border-radius: var(--border-radius);
+            transition: border-color 0.2s ease;
+            cursor: pointer;
+        }
+        .sentiment-gauge-container:hover {
+            border-color: var(--border-light);
+        }
+        .sentiment-gauge { /* Shared with S&D Drivers */
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .sentiment-gauge .label { /* Shared with S&D Drivers */
+            flex-grow: 1;
+            font-weight: 500;
+        }
+        .sentiment-gauge .value-bar { /* Shared with S&D Drivers */
+            width: 100px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: var(--border-light);
+            position: relative;
+            overflow: hidden;
+            margin-left: 10px;
+        }
+        .sentiment-gauge .value-fill { /* Shared with S&D Drivers */
+            height: 100%;
+            border-radius: 5px;
+            background-color: var(--yellow-neutral);
+        }
+        .sentiment-gauge .value-fill.green { background-color: var(--green-positive); }
+        .sentiment-gauge .value-fill.orange { background-color: var(--orange-warning); }
+        .sentiment-gauge .value-fill.red { background-color: var(--red-alert); }
+
+        .sentiment-reasons { /* Shared with S&D Drivers */
+            padding: 10px;
+            background-color: var(--bg-light);
+            border-radius: 5px;
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin-top: 10px;
+        }
+        .sentiment-reasons ul { /* Shared with S&D Drivers */
+            list-style: disc;
+            padding-left: 20px;
+        }
+        .sentiment-reasons ul li { /* Shared with S&D Drivers */
+            margin-bottom: 5px;
+        }
+
+        /* Upcoming Shipments Widget */
+        .shipment-item {
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+        .shipment-item strong {
+            display: block;
+            margin-bottom: 3px;
+        }
+        .shipment-item .action {
+            font-weight: 500;
+            color: var(--primary-blue);
+        }
+
+        /* Market Intelligence Widget (Dashboard & S&D Drivers) */
+        .intelligence-filters { /* Shared */
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .intelligence-filters .form-group { /* Shared */
+            margin-bottom: 0;
+            flex: 1;
+            min-width: 120px;
+        }
+        .intelligence-feed { /* Shared */
+            max-height: 300px; /* Dashboard specific, S&D might override */
+            overflow-y: auto;
+            border: 1px solid var(--border-light);
+            border-radius: var(--border-radius);
+            padding: 10px;
+            background-color: var(--bg-light); /* Added for S&D consistency */
+        }
+        .intelligence-item { /* Shared */
+            padding: 10px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .intelligence-item:last-child { /* Shared */
+            border-bottom: none;
+        }
+        .intelligence-item h4 { /* Shared */
+            font-size: 0.95em;
+            margin-bottom: 5px;
+        }
+        .intelligence-item p { /* Shared */
+            font-size: 0.85em;
+            color: var(--text-light);
+        }
+        .intelligence-item .meta { /* Shared */
+            font-size: 0.75em;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+
+        /* --- General Content Area Styles --- */
+        .content-section {
+            display: none;
+            background-color: var(--bg-white);
+            padding: var(--padding-md);
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px var(--shadow-light);
+            margin-bottom: var(--padding-md);
+        }
+        .content-section.active {
+            display: block;
+        }
+
+        h2 { /* General h2 */
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: var(--padding-sm);
+            color: var(--text-dark);
+        }
+
+        h3 { /* General h3 */
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-top: var(--padding-sm);
+            margin-bottom: 10px;
+        }
+
+        .section-title { /* Used by most sections */
+            font-size: 1.3em; /* Adjusted from 1.8em for less dominance */
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-dark); /* Ensure consistent color */
+        }
+
+
+        /* Tables (General) */
+        .data-table { /* Shared */
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .data-table th, .data-table td { /* Shared */
+            border: 1px solid var(--border-light);
+            padding: 10px 12px;
+            text-align: left;
+            word-break: break-word; /* From S&D for better text handling */
+        }
+        .data-table th { /* Shared */
+            background-color: var(--bg-light);
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .data-table tbody tr:nth-child(even) { /* Shared */
+            background-color: #f2f2f2; /* Slightly darker than var(--bg-light) for contrast */
+        }
+        .data-table-container { /* From S&D, for table overflow */
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+
+
+        /* Tabs (General) */
+        .tab-nav { /* Shared */
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .tab-nav-item { /* Shared */
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            color: var(--text-light);
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+        .tab-nav-item.active { /* Shared */
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+        .tab-content { /* For Analyst Workbench */
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Forms (General) */
+        .form-row {
+            display: flex;
+            gap: var(--padding-sm);
+            margin-bottom: 15px;
+        }
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid var(--border-light);
+            border-radius: 5px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95em;
+        }
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 5px;
+            font-size: 1em;
+            background-color: var(--bg-white);
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%236c757d" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 20px;
+        }
+
+        /* AI Co-Pilot Insights (Deal Creation) */
+        .ai-copilot-insights {
+            background-color: #e6f7ff;
+            border: 1px solid #99daff;
+            border-radius: var(--border-radius);
+            padding: var(--padding-sm);
+            margin-top: var(--padding-md);
+            color: var(--text-dark);
+        }
+        .ai-copilot-insights h4 {
+            font-size: 1.1em;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .ai-copilot-insights p {
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+        .ai-copilot-insights .status-indicator {
+            font-weight: 600;
+        }
+        .ai-copilot-insights .status-indicator.ok { color: var(--green-positive); } /* Changed to green for positive */
+        .ai-copilot-insights .status-indicator.warn { color: var(--orange-warning); }
+        .ai-copilot-insights .status-indicator.fail { color: var(--red-alert); }
+
+        /* Multi-step form indicators (Deal Creation) */
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        .step-indicator .step {
+            padding: 8px 15px;
+            border-radius: 20px;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin: 0 5px;
+            font-weight: 500;
+            border: 1px solid var(--border-light); /* Added border for definition */
+        }
+        .step-indicator .step.active {
+            background-color: var(--primary-blue);
+            color: var(--bg-white);
+            border-color: var(--primary-blue);
+        }
+        .step-indicator .step.completed { /* Style for completed steps */
+            background-color: var(--green-positive);
+            color: var(--bg-white);
+            border-color: var(--green-positive);
+        }
+
+
+        /* Alert Box (General) */
+        .alert-box {
+            background-color: #d4edda;
+            color: var(--green-positive);
+            border: 1px solid var(--green-positive);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        .alert-box.error { /* For error messages */
+            background-color: #f8d7da;
+            color: var(--red-alert);
+            border-color: var(--red-alert);
+        }
+
+
+        /* AI Tags Container (Analyst Workbench & S&D Drivers) */
+        .ai-tags-container { /* Shared */
+            border: 1px solid var(--border-light);
+            border-radius: var(--border-radius);
+            padding: var(--padding-sm);
+            min-height: 80px;
+            background-color: var(--bg-light);
+            margin-top: 10px;
+            display: flex; /* For tag wrapping */
+            flex-wrap: wrap; /* For tag wrapping */
+            gap: 5px; /* Spacing between tags */
+        }
+        .tag { /* Shared */
+            display: inline-block;
+            background-color: var(--primary-blue);
+            color: var(--bg-white);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            /* margin: 5px 5px 0 0; Removed, using gap in container */
+        }
+
+        /* Counterparty Directory Specific */
+        .counterparty-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .counterparty-details-grid .section-box {
+            background-color: var(--bg-light);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-light);
+        }
+        .counterparty-details-grid .section-box ul {
+            list-style: none;
+            padding: 0;
+        }
+        .counterparty-details-grid .section-box li {
+            margin-bottom: 5px;
+            font-size: 0.95em;
+        }
+        .counterparty-details-grid .section-box li strong {
+            color: var(--text-dark);
+            margin-right: 5px;
+        }
+
+        /* Progress Bar (Risk Dashboard) */
+        .progress-bar-container {
+            width: 100%;
+            background-color: var(--bg-light);
+            border-radius: 5px;
+            height: 10px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-blue);
+            width: 0%; /* JS will update this */
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+        .progress-bar.red { background-color: var(--red-alert); }
+        .progress-bar.orange { background-color: var(--orange-warning); }
+        .progress-bar.green { background-color: var(--green-positive); } /* Added green for consistency */
+
+
+        /* Arbitrage Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 200;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: var(--bg-white);
+            margin: auto;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #000;
+            text-decoration: none;
+        }
+        .modal h3 { /* Modal title */
+            margin-top:0; /* Reset margin */
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+        }
+        .partner-list {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .partner-column {
+            flex: 1;
+            border: 1px solid var(--border-light);
+            border-radius: var(--border-radius);
+            padding: 15px;
+        }
+         .partner-column h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+            color: var(--text-dark);
+         }
+        .partner-item {
+            padding: 10px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border-light);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .partner-item.selected {
+            background-color: #e6f7ff;
+            border-color: var(--primary-blue);
+            font-weight: 500;
+        }
+        .partner-item:hover {
+            background-color: var(--bg-light);
+        }
+        .partner-item .reasoning {
+            font-size: 0.8em;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+        .modal-footer {
+            text-align: right;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-light);
+        }
+        .modal-footer .btn {
+            width: auto; /* Override full width for modal buttons */
+        }
+
+        /* Supply Predictor & S&D Drivers - Supply Filters */
+        .supply-predictor-filters { /* Shared */
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .supply-predictor-filters .form-group { /* Shared */
+            flex: 1;
+            min-width: 150px;
+            margin-bottom: 0;
+        }
+        .supply-change-positive { color: var(--green-positive); font-weight: 600; }
+        .supply-change-negative { color: var(--red-alert); font-weight: 600; }
+        .supply-sentiment-bullish { color: var(--green-positive); font-weight: 600; }
+        .supply-sentiment-bearish { color: var(--red-alert); font-weight: 600; }
+
+        /* Review Summary Box for Deal Creation */
+        .review-summary-box {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-light);
+            border-radius: var(--border-radius);
+            padding: var(--padding-md);
+            margin-bottom: var(--padding-md);
+        }
+        .review-summary-box h4 {
+            font-size: 1.2em; /* Slightly larger for emphasis */
+            color: var(--primary-blue);
+            margin-bottom: 15px; /* More spacing */
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 10px; /* More spacing */
+        }
+        .review-summary-box p {
+            font-size: 0.95em;
+            margin-bottom: 10px; /* Consistent spacing */
+            line-height: 1.7; /* Improved readability */
+        }
+        .review-summary-box p strong {
+            color: var(--text-dark);
+            min-width: 180px; /* Adjusted for better alignment of values */
+            display: inline-block;
+            margin-right: 10px; /* Space between label and value */
+        }
+        .review-summary-box .summary-section { /* For grouping related info */
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--border-light); /* Softer separator */
+        }
+        .review-summary-box .summary-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .review-summary-box .summary-section h5 {
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+
+        /* S&D Drivers Specific Styles (prefixed with #sd-drivers for scoping) */
+        #sd-drivers .header { /* Header within S&D Drivers page */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--padding-md);
+            padding-bottom: var(--padding-sm);
+            border-bottom: 1px solid var(--border-light);
+        }
+        #sd-drivers .header .form-group { /* Form group in S&D header */
+            margin-bottom: 0;
+            min-width: 250px;
+        }
+        #sd-drivers .section { /* Sections within S&D Drivers */
+            margin-bottom: var(--padding-md);
+            padding-bottom: var(--padding-md);
+            border-bottom: 1px solid var(--border-light);
+        }
+        #sd-drivers .section:last-child {
+            border-bottom: none;
+        }
+        #sd-drivers h2 { /* h2 within S&D Drivers */
+            font-size: 1.6em; /* Larger than general page-title h1 */
+            font-weight: 600;
+            margin-bottom: var(--padding-md);
+            color: var(--text-dark);
+        }
+        #sd-drivers h3 { /* h3 within S&D Drivers cards/sections */
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-top: var(--padding-sm); /* Consistent with general h3 */
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+        #sd-drivers .card-grid { /* Card grid in S&D Drivers */
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--padding-md);
+            margin-bottom: var(--padding-md);
+        }
+        #sd-drivers .card { /* Cards in S&D Drivers */
+            background-color: var(--bg-white);
+            padding: var(--padding-sm);
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px var(--shadow-light);
+            overflow: hidden;
+        }
+        #sd-drivers .intelligence-feed { /* Override for S&D intelligence feed height */
+            max-height: 350px; /* Adjusted */
+        }
+        #sd-drivers .ai-sentiment { /* AI Sentiment tags in S&D news */
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            margin-left: 5px; /* Space from text */
+        }
+        #sd-drivers .ai-sentiment.Bullish { background-color: var(--green-positive); color: white; }
+        #sd-drivers .ai-sentiment.Bearish { background-color: var(--red-alert); color: white; }
+        #sd-drivers .ai-sentiment.Neutral { background-color: var(--yellow-neutral); color: var(--text-dark); }
+
+        #sd-drivers .harvest-calendar-display {
+            background-color: var(--bg-light);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            font-size: 0.9em;
+            color: var(--text-light);
+            border: 1px solid var(--border-light); /* Added border */
+        }
+         #sd-drivers .harvest-calendar-display h4 { /* Title for harvest seasons */
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+            font-size: 1em;
+         }
+        #sd-drivers .harvest-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-weight: 500;
+            font-size: 0.95em;
+            padding: 10px;
+            background-color: var(--bg-light);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-light);
+        }
+        #sd-drivers .harvest-info span.change {
+            color: var(--green-positive);
+        }
+        #sd-drivers .harvest-info span.change.negative {
+            color: var(--red-alert);
+        }
+
+        #sd-drivers .trader-insight-card {
+            border: 1px solid var(--border-light);
+            border-radius: var(--border-radius);
+            padding: var(--padding-sm);
+            margin-bottom: var(--padding-sm);
+            background-color: #fdfdfd; /* Slightly off-white for definition */
+        }
+        #sd-drivers .trader-insight-card h4 { /* Titles in trader insight cards */
+            font-size: 1em;
+            color: var(--primary-blue);
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+        #sd-drivers .trader-insight-card p {
+            font-size: 0.9em; /* Adjusted for better fit */
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+        #sd-drivers .trader-insight-card .reasoning {
+            font-size: 0.8em;
+            color: var(--text-light);
+            font-style: italic;
+        }
+        #sd-drivers #sd-trade-suggestions h4 { /* Specific for "Best to Sell/Buy" titles */
+             margin-top: 15px;
+             margin-bottom: 10px;
+             font-size: 1.05em;
+             color: var(--text-dark);
+             border-bottom: 1px solid var(--border-light);
+             padding-bottom: 5px;
+        }
+         #sd-drivers #sd-trade-suggestions h4:first-child {
+            margin-top: 0;
+         }
+
+
+        /* Simulated Chart Styles (S&D Drivers) */
+        #sd-drivers .chart-container {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            border-bottom: 1px solid var(--border-light);
+            padding-left: 5px; /* Space for potential Y-axis labels if added */
+            position: relative;
+            background-color: var(--bg-light);
+            border-radius: var(--border-radius);
+            overflow: hidden; /* Clip bars */
+            border: 1px solid var(--border-light); /* Add border around chart */
+        }
+        #sd-drivers .chart-bar {
+            flex-grow: 1;
+            background-color: var(--primary-blue);
+            margin: 0 2px; /* Reduced margin for more bars */
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+        }
+        #sd-drivers .chart-bar.bullish { background-color: var(--green-positive); }
+        #sd-drivers .chart-bar.bearish { background-color: var(--red-alert); }
+        #sd-drivers .chart-bar-label {
+            position: absolute;
+            bottom: -20px; /* Position below bar */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7em;
+            color: var(--text-light);
+            white-space: nowrap;
+        }
+        #sd-drivers .chart-bar-tooltip {
+            position: absolute;
+            top: -30px; /* Position above bar */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 10; /* Ensure tooltip is on top */
+        }
+        #sd-drivers .chart-bar:hover .chart-bar-tooltip {
+            opacity: 1;
+        }
+        #sd-drivers .chart-bar:hover {
+            opacity: 0.8;
+            transform: scaleY(1.02); /* Slight grow effect */
+        }
+
+        /* Tooltip for Ratios (S&D Drivers) */
+        #sd-drivers .tooltip-container {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+        #sd-drivers .tooltip-text {
+            visibility: hidden;
+            background-color: rgba(0,0,0,0.85);
+            color: #fff;
+            text-align: left; /* Better for multi-line tooltips */
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 10; /* Ensure on top */
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            min-width: 220px; /* Wider for more text */
+            font-size: 0.85em;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        #sd-drivers .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        #sd-drivers .tooltip-text::after { /* Arrow */
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(0,0,0,0.85) transparent transparent transparent;
+        }
+        #sd-drivers .chart-placeholder { /* General placeholder for charts if needed */
+            background-color: #e9ecef;
+            height: 200px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            border: 1px solid var(--border-light);
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+                padding: var(--padding-sm) 0;
+            }
+            .sidebar-nav a {
+                padding: 10px 0;
+                justify-content: center;
+                text-align: center;
+            }
+            .sidebar-nav a span { display: none; }
+            .sidebar-nav a i { margin-right: 0; }
+            .sidebar-logo img { width: 60px; }
+            .sidebar-footer { padding: 10px; }
+            .sidebar-footer button { padding: 8px; font-size: 0.8em; }
+
+            .main-content { padding: var(--padding-sm); }
+            .page-header { flex-direction: column; align-items: flex-start; }
+            .page-header .quick-links { margin-top: 10px; width: 100%; }
+            .page-header .quick-links .btn { width: 100%; }
+
+
+            .widgets-grid { grid-template-columns: 1fr; }
+            .form-row { flex-direction: column; gap: 0; } /* Keep gap 0 if labels are on top */
+             .form-row .form-group { margin-bottom: 15px; } /* Add margin back for stacked items */
+
+
+            .counterparty-details-grid { grid-template-columns: 1fr; }
+            .intelligence-filters { flex-direction: column; } /* Global */
+            .partner-list { flex-direction: column; }
+            .modal-content { width: 95%; padding: 20px; }
+            .supply-predictor-filters { flex-direction: column; } /* Global */
+
+            #sd-drivers .header { flex-direction: column; align-items: flex-start; }
+            #sd-drivers .header .form-group { width: 100%; margin-top: 15px; }
+            #sd-drivers .card-grid { grid-template-columns: 1fr; }
+            #sd-drivers .card { overflow-x: auto; } /* Allow horizontal scroll within cards if content overflows */
+            #sd-drivers .intelligence-filters .form-group { min-width: 100%; }
+            #sd-drivers .supply-predictor-filters .form-group { min-width: 100%; }
+            #sd-drivers .data-table-container { overflow-x: auto;}
+
+            .step-indicator { flex-wrap: wrap; } /* Allow steps to wrap on small screens */
+            .step-indicator .step { margin-bottom: 5px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="login-container" id="login-page">
+            <div class="login-box">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8YjH_QYPbW7B0X8tB2h0jX_7XqZNkYj3NmA&s" alt="Hectar AI Logo" class="login-logo" onerror="this.src='https://placehold.co/150x50/007bff/ffffff?text=Hectar+AI'; this.onerror=null;">
+                <h2>Welcome to Hectar AI</h2>
+                <p class="tagline">Intelligent Agri-Trading, Simplified.</p>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" value="masteruser" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" value="password123" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button type="button" class="btn btn-secondary">Login with SSO (Mock)</button>
+                </form>
+                <p class="login-error" id="login-error"></p>
+            </div>
+        </div>
+
+        <div class="app-container" id="main-app">
+            <aside class="sidebar">
+                <div class="sidebar-logo">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8YjH_QYPbW7B0X8tB2h0jX_7XqZNkYj3NmA&s" alt="Hectar AI Logo" onerror="this.src='https://placehold.co/120x40/007bff/ffffff?text=Hectar'; this.onerror=null;">
+                </div>
+                <nav class="sidebar-nav">
+                    <ul>
+                        <li><a href="#" data-section="dashboard" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                        <li><a href="#" data-section="analyst-workbench"><i class="fas fa-chart-line"></i> <span>Analyst Workbench</span></a></li>
+                        <li><a href="#" data-section="deal-creation"><i class="fas fa-handshake"></i> <span>Deal Management</span></a></li>
+                        <li><a href="#" data-section="sd-drivers"><i class="fas fa-leaf"></i> <span>S&D Drivers</span></a></li>
+                        <li><a href="#" data-section="counterparty-directory"><i class="fas fa-building"></i> <span>Counterparty Directory</span></a></li>
+                        <li><a href="#" data-section="arbitrage-tracker"><i class="fas fa-exchange-alt"></i> <span>Arbitrage Tracker</span></a></li>
+                        <li data-role-visibility="risk_manager"><a href="#" data-section="risk-dashboard"><i class="fas fa-exclamation-triangle"></i> <span>Risk Management</span></a></li>
+                        <li><a href="#" data-section="supply-predictor"><i class="fas fa-truck-loading"></i> <span>Supply Predictor</span></a></li>
+                        <li data-role-visibility="admin"><a href="#" data-section="admin-panel"><i class="fas fa-cog"></i> <span>Admin Panel</span></a></li>
+                    </ul>
+                </nav>
+                <div class="sidebar-footer">
+                    <button id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <div class="page-header">
+                    <h1 id="page-title">Trader One's Dashboard</h1>
+                    <div class="quick-links">
+                        <button class="btn btn-primary" onclick="showSection('deal-creation')"><i class="fas fa-plus"></i> Create New Deal</button>
+                    </div>
+                </div>
+
+                <section class="content-section active" id="dashboard">
+                    <div class="widgets-grid">
+                        <div class="widget">
+                            <div class="widget-header"><h3>My Portfolio MTM Snapshot</h3></div>
+                            <div class="widget-content">
+                                <div class="mtm-value" id="mtm-snapshot-value">+$175,320</div>
+                                <div class="mtm-trend-sparkline">Mini Line Chart Placeholder</div>
+                            </div>
+                            <div class="widget-footer" id="mtm-snapshot-updated">Updated: Just Now</div>
+                        </div>
+                        <div class="widget">
+                            <div class="widget-header"><h3>Top Arbitrage Opportunities</h3></div>
+                            <div class="widget-content">
+                                <table class="arbitrage-table">
+                                    <thead><tr><th>Commodity</th><th>Origin</th><th>Destination</th><th>Net Arbitrage</th><th>Action</th></tr></thead>
+                                    <tbody id="arbitrage-table-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="widget">
+                            <div class="widget-header"><h3>Critical Risk Alerts</h3></div>
+                            <div class="widget-content" id="risk-alerts">
+                                <div class="risk-alert high"><i class="fas fa-exclamation-circle"></i>Counterparty 'Global Grain Impex' exposure at 92% of $500K limit.</div>
+                                <div class="risk-alert"><i class="fas fa-flag"></i>Geopolitical Alert: Port congestion at Cotonou, Benin.</div>
+                            </div>
+                        </div>
+                        <div class="widget">
+                            <div class="widget-header"><h3>Market Sentiment Gauges</h3></div>
+                            <div class="widget-content" id="market-sentiment-gauges"></div>
+                        </div>
+                        <div class="widget">
+                            <div class="widget-header"><h3>Upcoming Shipments & Actions</h3></div>
+                            <div class="widget-content" id="upcoming-actions"></div>
+                        </div>
+                        <div class="widget">
+                            <div class="widget-header"><h3>Market Intelligence</h3></div>
+                            <div class="widget-content">
+                                <div class="tab-nav" id="dashboard-news-tabs">
+                                    <div class="tab-nav-item active" data-tab="news">News</div>
+                                    <div class="tab-nav-item" data-tab="socialMedia">Social Media</div>
+                                    <div class="tab-nav-item" data-tab="internalChatter">Internal Chatter</div>
+                                </div>
+                                <div class="intelligence-filters">
+                                    <div class="form-group"><select id="news-filter-commodity" onchange="filterNewsFeed()"><option value="">All Commodities</option></select></div>
+                                    <div class="form-group"><select id="news-filter-geography" onchange="filterNewsFeed()"><option value="">All Geographies</option></select></div>
+                                    <div class="form-group"><select id="news-sort-by" onchange="filterNewsFeed()"><option value="recent">Recent</option><option value="importance">Importance</option></select></div>
+                                </div>
+                                <div class="intelligence-feed" id="news-feed-content"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="analyst-workbench">
+                    <h2 class="section-title">Analyst Workbench</h2>
+                    <div class="tab-nav">
+                        <div class="tab-nav-item active" data-tab="price-entry">Price Entry & Updation</div>
+                        <div class="tab-nav-item" data-tab="market-chatter">Market Chatter</div>
+                    </div>
+                    <div class="tab-content active" id="tab-price-entry">
+                        <h3>Price Entry & Updation</h3>
+                        <div class="data-table-container">
+                            <table class="data-table">
+                                <thead><tr><th>Commodity</th><th>Sub-Variety/Quality</th><th>Origin</th><th>Destination/Incoterm</th><th>Price (USD)</th><th>Basis</th><th>Last Updated</th><th>Analyst</th><th>Quick Update</th></tr></thead>
+                                <tbody id="price-entry-table-body"></tbody>
+                            </table>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <h4>Smart Input Demo:</h4>
+                            <p>Analyst types: RCN >52 GHA TUT</p>
+                            <div class="form-row">
+                                <div class="form-group"><input type="text" id="smart-price-input" placeholder="e.g., RCN >52 GHA TUT"></div>
+                                <div class="form-group"><input type="number" id="new-price-value" placeholder="New Price ($)"></div>
+                                <button class="btn btn-primary" onclick="updatePriceFromSmartInput()">Update Price</button>
+                            </div>
+                            <p id="smart-input-feedback" class="login-error"></p>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="tab-market-chatter">
+                        <h3>Market Chatter</h3>
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap;"> <div style="flex: 2; min-width: 300px;"> <div class="form-group"><label for="market-chatter-input">Analyst Input:</label><textarea id="market-chatter-input" placeholder="Type market intelligence here..."></textarea></div>
+                                <button class="btn btn-primary" onclick="processMarketChatter()">Process Chatter</button>
+                            </div>
+                            <div style="flex: 1; min-width: 250px;"> <div class="form-group"><label>AI-Suggested Tags:</label><div class="ai-tags-container" id="ai-suggested-tags"></div></div>
+                                <div class="form-group"><label>Recent Notes:</label><ul id="recent-chatter-notes" style="list-style: none; padding: 0; max-height: 150px; overflow-y: auto; border: 1px solid var(--border-light); padding: 5px; border-radius: var(--border-radius);"></ul></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="deal-creation">
+                    <h2 class="section-title">Intelligent Deal Creation / New Mandate</h2>
+                    <div class="step-indicator">
+                        <span class="step active" id="deal-step-1-indicator">1. Deal Setup</span>
+                        <span class="step" id="deal-step-2-indicator">2. Counterparty</span>
+                        <span class="step" id="deal-step-3-indicator">3. AI Co-Pilot</span>
+                        <span class="step" id="deal-step-4-indicator">4. Review & Confirm</span>
+                    </div>
+
+                    <form id="deal-creation-form">
+                        <div id="deal-step-1-content">
+                            <h3>Step 1: Deal Setup</h3>
+                            <div class="form-row">
+                                <div class="form-group"><label for="deal-mandate-name">Mandate Name:</label><input type="text" id="deal-mandate-name" placeholder="e.g., RCN Buy July CIV"></div>
+                                <div class="form-group"><label for="deal-mandate-type">Mandate Type:</label><select id="deal-mandate-type"><option value="Buy">Buy</option><option value="Sell">Sell</option></select></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group"><label for="deal-commodity">Target Commodity:</label><select id="deal-commodity"></select></div>
+                                <div class="form-group"><label for="deal-quality">Sub-Variety/Quality:</label><select id="deal-quality"><option value="">Select Quality</option></select></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group"><label for="deal-quantity">Quantity (MT):</label><input type="number" id="deal-quantity" value="100"></div>
+                                <div class="form-group"><label for="deal-price">Target Price (USD/MT):</label><input type="number" id="deal-price" value="1580"></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group"><label for="deal-incoterm">Incoterm:</label><select id="deal-incoterm"><option value="CIF">CIF</option><option value="FOB">FOB</option><option value="CFR">CFR</option><option value="EXW">EXW</option><option value="DAP">DAP</option></select></div>
+                                <div class="form-group"><label for="deal-origin">Origin:</label><select id="deal-origin"><option value="">Select Origin</option></select></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group"><label for="deal-destination">Destination Port:</label><input type="text" id="deal-destination" placeholder="e.g., Tuticorin"></div>
+                                <div class="form-group"><label for="deal-shipment-period">Shipment Period:</label><input type="text" id="deal-shipment-period" placeholder="e.g., July 2025"></div>
+                            </div>
+                            <div class="form-group"><label for="deal-payment-terms">Payment Terms:</label><input type="text" id="deal-payment-terms" placeholder="e.g., 100% CAD, 20% Adv / 80% CAD"></div>
+                            <div class="form-group"><label for="deal-other-terms">Other Terms / Notes:</label><textarea id="deal-other-terms" placeholder="Specify any other terms or important notes..."></textarea></div>
+                            <div style="text-align: right;"><button type="button" class="btn btn-primary" onclick="navigateToDealStep(2)">Next: Counterparty Details <i class="fas fa-arrow-right"></i></button></div>
+                        </div>
+
+                        <div id="deal-step-2-content" style="display:none;">
+                            <h3>Step 2: Counterparty Details</h3>
+                            <div class="form-row">
+                                <div class="form-group"><label for="deal-counterparty-name">Counterparty Name:</label><select id="deal-counterparty-name" onchange="populateCounterpartyInfo()"><option value="">Select or Add New</option></select></div>
+                                <div class="form-group"><label for="deal-cp-contact-person">Contact Person:</label><input type="text" id="deal-cp-contact-person" placeholder="e.g., Mr. John Doe"></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group"><label for="deal-cp-email">Email:</label><input type="email" id="deal-cp-email" placeholder="e.g., john.doe@example.com"></div>
+                                <div class="form-group"><label for="deal-cp-phone">Phone:</label><input type="tel" id="deal-cp-phone" placeholder="e.g., +1-555-1234"></div>
+                            </div>
+                            <div class="form-group"><label for="deal-cp-address">Address:</label><textarea id="deal-cp-address" placeholder="Counterparty's full address"></textarea></div>
+                            <div class="form-row">
+                                <div class="form-group"><label>Internal Rating (Hectar):</label><p id="deal-cp-internal-rating-display" class="info-display">Select counterparty</p></div>
+                                <div class="form-group"><label>External Rating (e.g., D&B - Mock):</label><p id="deal-cp-external-rating-display" class="info-display">Select counterparty</p></div>
+                            </div>
+                            <div class="form-group"><label for="deal-cp-notes">Deal Specific Counterparty Notes:</label><textarea id="deal-cp-notes" placeholder="Notes for this specific deal..."></textarea></div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <button type="button" class="btn btn-secondary" onclick="navigateToDealStep(1)"><i class="fas fa-arrow-left"></i> Back to Deal Setup</button>
+                                <button type="button" class="btn btn-primary" onclick="navigateToDealStep(3)">Next: AI Co-Pilot <i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+
+                        <div id="deal-step-3-content" style="display:none;">
+                            <h3>Step 3: AI Co-Pilot Insights</h3>
+                            <div class="ai-copilot-insights" id="copilot-results">
+                                </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                                <button type="button" class="btn btn-secondary" onclick="navigateToDealStep(2)"><i class="fas fa-arrow-left"></i> Back to Counterparty</button>
+                                <button type="button" class="btn btn-primary" onclick="navigateToDealStep(4)">Next: Review & Confirm <i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+
+                        <div id="deal-step-4-content" style="display:none;">
+                            <h3>Step 4: Review & Confirm Mandate</h3>
+                            <div class="review-summary-box" id="deal-review-summary">
+                                </div>
+                            <div class="alert-box" id="deal-final-message" style="display:none;"></div>
+                            <p id="deal-contract-info" style="display:none; margin-top:15px; font-style:italic; color:var(--text-light);">Contract auto-generation process initiated. A preview will be available in Order Management.</p>
+                            <div style="display: flex; justify-content: space-between; margin-top: 20px;" id="deal-review-buttons">
+                                <button type="button" class="btn btn-secondary" onclick="navigateToDealStep(3)"><i class="fas fa-arrow-left"></i> Back to AI Co-Pilot</button>
+                                <button type="button" class="btn btn-primary" onclick="confirmAndCreateDeal()"><i class="fas fa-check-circle"></i> Confirm & Create Deal</button>
+                            </div>
+                            <div style="margin-top: 20px; display:none;" id="deal-post-creation-buttons">
+                                <button type="button" class="btn btn-primary" onclick="showSection('order-management')"><i class="fas fa-list-alt"></i> View All Orders</button>
+                                <button type="button" class="btn btn-secondary" onclick="resetDealCreation(true)"><i class="fas fa-plus-circle"></i> Create Another Mandate</button>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="content-section" id="order-management">
+                    <h2 class="section-title">Order Management</h2>
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead><tr><th>Deal ID</th><th>Mandate Name</th><th>Counterparty</th><th>Commodity</th><th>Qty (MT)</th><th>Value</th><th>Shipment</th><th>Status</th><th>MTM</th></tr></thead>
+                            <tbody id="order-management-table-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="content-section" id="sd-drivers">
+                    <div id="sd-drivers-header" class="header" style=" /* Overriding main-content page-header style for this section */
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: var(--padding-md);
+                        padding-bottom: var(--padding-sm);
+                        border-bottom: 1px solid var(--border-light);">
+                        <h2 class="section-title" style="margin-bottom:0; border-bottom:0; font-size: 1.6em;">S&D Drivers</h2>
+                        <div class="form-group" style="margin-bottom:0; min-width: 250px;">
+                            <label for="commodity-select-sd-drivers">Select Commodity:</label>
+                            <select id="commodity-select-sd-drivers" onchange="renderSNDDriversPage()"></select>
+                        </div>
+                    </div>
+
+                    <div id="sd-drivers-content-area">
+                        <section class="section" id="sd-market-dynamics-section">
+                            <h3>1. Market Dynamics</h3>
+                            <div class="card-grid">
+                                <div class="card">
+                                    <h4>Latest Prices (Analyst & AI-Derived)</h4>
+                                    <div class="data-table-container"><table class="data-table"><thead><tr><th>Origin</th><th>Destination/Incoterm</th><th>Sub-Variety</th><th>Price (USD)</th><th>Last Updated</th></tr></thead><tbody id="sd-prices-table-body"></tbody></table></div>
+                                </div>
+                                <div class="card">
+                                    <h4>Price Trends (Simulated)</h4>
+                                    <div class="chart-container" id="price-chart-simulated"></div>
+                                </div>
+                                <div class="card">
+                                    <h4>Market Sentiment (AI-Powered)</h4>
+                                    <div id="sd-market-sentiment-gauges"></div>
+                                </div>
+                                <div class="card" style="grid-column: span 2 / auto;"> <h4>Key Market Ratios (AI-Calculated)</h4>
+                                    <div class="data-table-container"><table class="data-table"><thead><tr><th>Ratio</th><th>Value</th><th>Significance</th></tr></thead><tbody id="sd-ratios-table-body"></tbody></table></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="section" id="sd-supply-outlook-section">
+                            <h3>2. Supply Outlook</h3>
+                            <div class="card-grid">
+                                <div class="card">
+                                    <h4>Harvest Calendar & Expected Yields</h4>
+                                    <div id="sd-harvest-calendar-display" class="harvest-calendar-display"></div>
+                                    <div class="harvest-info"><span id="sd-harvest-yoy-label">Expected Harvest (Y-o-Y):</span><span id="sd-harvest-yoy-change" class="change"></span></div>
+                                </div>
+                                <div class="card" style="grid-column: span 2 / auto;">
+                                    <h4>Upcoming Fresh Supply (AI Predictor)</h4>
+                                    <div class="supply-predictor-filters" id="sd-supply-filters-container">
+                                        <div class="form-group"><label for="sd-supply-filter-port">Port of Choice:</label><select id="sd-supply-filter-port" onchange="renderSupplyPredictorTableSD()"><option value="">All Ports</option></select></div>
+                                        <div class="form-group" style="display:none;"><label for="sd-supply-filter-commodity-hidden">Commodity:</label><select id="sd-supply-filter-commodity-hidden" disabled></select></div>
+                                    </div>
+                                    <div class="data-table-container"><table class="data-table"><thead><tr><th>Vessel</th><th>ETA</th><th>Qty Est.</th><th>Weekly Change</th><th>Sentiment</th><th>Origin</th><th>Destination</th></tr></thead><tbody id="sd-vessel-arrivals-table-body"></tbody></table></div>
+                                </div>
+                                <div class="card">
+                                    <h4>Crop Progress Updates & Commentary (AI-Generated)</h4>
+                                    <div id="sd-crop-commentary-content" class="intelligence-feed" style="max-height: 280px;"></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="section" id="sd-market-intelligence-section">
+                            <h3>3. Market Intelligence Insights</h3>
+                            <div class="tab-nav" id="sd-market-intelligence-tabs">
+                                <div class="tab-nav-item active" data-tab="news">Web News</div>
+                                <div class="tab-nav-item" data-tab="socialMedia">Social Media</div>
+                                <div class="tab-nav-item" data-tab="internalChatter">Analyst Chatter</div>
+                            </div>
+                            <div class="intelligence-filters" id="sd-news-filters-container">
+                                <div class="form-group" style="display:none;"><label for="sd-news-filter-commodity-hidden">Commodity:</label><select id="sd-news-filter-commodity-hidden" disabled></select></div>
+                                <div class="form-group"><label for="sd-news-filter-geography">Geography:</label><select id="sd-news-filter-geography" onchange="filterNewsFeedSD()"><option value="">All Geographies</option></select></div>
+                                <div class="form-group"><label for="sd-news-sort-by">Sort by:</label><select id="sd-news-sort-by" onchange="filterNewsFeedSD()"><option value="recent">Recent</option><option value="importance">Importance</option></select></div>
+                            </div>
+                            <div class="intelligence-feed" id="sd-news-feed-content"></div>
+                        </section>
+
+                        <section class="section" id="sd-trader-recommendations-section">
+                            <h3>4. Trader Insights & Recommendations</h3>
+                            <div class="card-grid">
+                                <div class="card">
+                                    <h4>Active Counterparty Trends (AI-Driven)</h4>
+                                    <div id="sd-active-counterparty-trends"></div>
+                                </div>
+                                <div class="card">
+                                    <h4>Intelligent Trade Suggestions (AI-Powered)</h4>
+                                    <div id="sd-trade-suggestions">
+                                        <div id="sd-suggested-buyers"></div>
+                                        <div id="sd-suggested-sellers"></div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <h4>Analyst Chit Chatter</h4>
+                                    <div style="display: flex; flex-direction: column; height: 100%;">
+                                        <div class="form-group" style="flex-grow: 1;"><label for="sd-market-chatter-input">Capture Intelligence:</label><textarea id="sd-market-chatter-input" placeholder="Type market intelligence here..."></textarea></div>
+                                        <button class="btn btn-primary" style="width:100%;" onclick="processMarketChatterSD()">Process & Tag</button>
+                                        <div class="form-group" style="margin-top: 15px;"><label>AI-Suggested Tags:</label><div class="ai-tags-container" id="sd-ai-suggested-tags"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+
+
+                <section class="content-section" id="counterparty-directory">
+                    <h2 class="section-title">Counterparty Directory</h2>
+                    <div class="form-row">
+                        <div class="form-group" style="flex-grow:2;">
+                            <label for="counterparty-select">Select Counterparty to View Profile:</label>
+                            <select id="counterparty-select"></select>
+                        </div>
+                        <div class="form-group" style="flex-grow:1; align-self:flex-end;">
+                             <button class="btn btn-primary" style="width:100%;" onclick="renderCounterpartyProfile()">View Profile</button>
+                        </div>
+                    </div>
+                    <div id="counterparty-profile" style="margin-top: 20px; display: none;">
+                        <h3 id="cp-profile-header" style="font-size:1.4em; color:var(--primary-blue); margin-bottom:15px;"></h3>
+                        <div class="counterparty-details-grid">
+                            <div class="section-box"><h4>Contact Details:</h4><ul id="cp-contact-details-list"></ul></div>
+                            <div class="section-box"><h4>Hectar Internal Assessment:</h4><ul id="cp-internal-assessment-list"></ul></div>
+                            <div class="section-box"><h4>External Intelligence (Mock):</h4><ul id="cp-external-intelligence-list"></ul></div>
+                            <div class="section-box"><h4>Documents:</h4><ul id="cp-documents-list"><li><a href="#">KYC Docs (mock)</a></li><li><a href="#">Master Agreements (mock)</a></li></ul></div>
+                        </div>
+                        <h4>Trade History (with Hectar):</h4>
+                        <div class="data-table-container"><table class="data-table"><thead><tr><th>Commodity</th><th>Quantity</th><th>Value</th><th>Date</th><th>Status</th></tr></thead><tbody id="cp-trade-history-body"></tbody></table></div>
+                        <h4 style="margin-top:20px;">Trade Nexus (AI-Derived - Illustrative):</h4>
+                        <ul id="cp-trade-nexus-list" style="list-style: none; padding-left: 0; background-color:var(--bg-light); padding:10px; border-radius:var(--border-radius);"></ul>
+                    </div>
+                </section>
+
+                <section class="content-section" id="arbitrage-tracker">
+                    <h2 class="section-title">Arbitrage Tracker</h2>
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead><tr><th>Commodity</th><th>Leg 1 (Buy)</th><th>Leg 2 (Sell)</th><th>Est. Costs</th><th>Est. Net Margin ($/MT)</th><th>Confidence</th><th>Action</th></tr></thead>
+                            <tbody id="arbitrage-tracker-table-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="content-section" id="risk-dashboard">
+                    <h2 class="section-title">Risk Management Dashboard</h2>
+                    <h3 style="margin-bottom:20px;">Total Live Exposure: <span id="total-live-exposure" style="color:var(--primary-blue); font-weight:700;"></span></h3>
+                    <div class="widgets-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));"> <div class="widget"> <div class="widget-header"><h3>Exposure by Commodity</h3></div> <div class="widget-content"><div class="chart-placeholder" id="exposure-by-commodity-chart">Pie Chart Placeholder</div> <ul id="exposure-by-commodity-list" class="styled-list"></ul></div></div>
+                        <div class="widget"> <div class="widget-header"><h3>Exposure by Counterparty Risk</h3></div> <div class="widget-content"><div class="chart-placeholder" id="exposure-by-risk-chart">Pie Chart Placeholder</div> <ul id="exposure-by-risk-category-list" class="styled-list"></ul></div></div>
+                    </div>
+                    <h3 style="margin-top:30px;">Counterparty Exposure Limits:</h3>
+                    <div id="counterparty-exposure-limits" style="margin-top:10px;"></div>
+                    <div class="widgets-grid" style="grid-template-columns: 1fr 1fr; margin-top:30px;">
+                        <div class="widget"><div class="widget-header"><h3>VaR Trend (Value at Risk)</h3></div><div class="widget-content"><div class="chart-placeholder">Line Chart: Portfolio VaR</div></div></div>
+                        <div class="widget"><div class="widget-header"><h3>Geographic Risk Concentration</h3></div><div class="widget-content"><div class="chart-placeholder">World Map with Hotspots</div></div></div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="supply-predictor">
+                    <h2 class="section-title">Supply Predictor Module</h2>
+                    <div class="supply-predictor-filters">
+                        <div class="form-group"><label for="supply-filter-port">Port of Choice:</label><select id="supply-filter-port" onchange="renderSupplyPredictor()"><option value="">All Ports</option></select></div>
+                        <div class="form-group"><label for="supply-filter-commodity">Commodity of Choice:</label><select id="supply-filter-commodity" onchange="renderSupplyPredictor()"><option value="">All Commodities</option></select></div>
+                    </div>
+                    <h3>Upcoming Vessel Arrivals (AI Estimated):</h3>
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead><tr><th>Vessel</th><th>ETA</th><th>Commodity</th><th>Qty Est.</th><th>Weekly Change</th><th>Sentiment</th><th>Origin</th><th>Destination</th></tr></thead>
+                            <tbody id="vessel-arrivals-table-body"></tbody>
+                        </table>
+                    </div>
+                    <h3 style="margin-top:20px;">Harvest & Weather Impact (RCN - West Africa - Mock):</h3>
+                    <ul id="harvest-weather-list" style="list-style: disc; padding-left: 20px; margin-top:10px;"></ul>
+                </section>
+
+                <section class="content-section" id="admin-panel">
+                    <h2 class="section-title">Admin Panel</h2>
+                    <h3>Commodity Configuration</h3>
+                    <div id="commodity-config-display" style="margin-bottom:20px;"></div>
+                    <h3 style="margin-top: 30px;">Add/Update Commodity Configuration</h3>
+                    <form id="add-commodity-form">
+                        <div class="form-row"><div class="form-group"><label for="admin-commodity-name">Commodity Name:</label><input type="text" id="admin-commodity-name" required></div></div>
+                        <div class="form-group"><label for="admin-sub-varieties">Sub-Varieties (comma-separated):</label><input type="text" id="admin-sub-varieties"></div>
+                        <div class="form-group"><label for="admin-quality-params">Quality Parameters (JSON):</label><textarea id="admin-quality-params" placeholder='{"Outturn": "48-52%", "Moisture": "<10%"}'></textarea></div>
+                        <div class="form-group"><label for="admin-origins">Standard Origins (comma-separated):</label><input type="text" id="admin-origins"></div>
+                        <div class="form-group"><label for="admin-harvest-calendar">Harvest Calendar (JSON):</label><textarea id="admin-harvest-calendar" placeholder='{"Ghana": {"start": "Mar", "end": "Jun", "peak": "Apr-May", "crop_commentary": "..."}}'></textarea></div>
+                        <div class="form-group"><label for="admin-sd-analysis">Supply & Demand Analysis:</label><textarea id="admin-sd-analysis"></textarea></div>
+                        <div class="form-group"><label for="admin-typical-specs">Typical Specs (JSON):</label><textarea id="admin-typical-specs" placeholder='{">52 LBS": "Nut Count: 180-200..."}'></textarea></div>
+                        <div class="form-group"><label for="admin-expected-harvest-yoy">Expected Harvest Y-o-Y (e.g., +2%):</label><input type="text" id="admin-expected-harvest-yoy"></div>
+                        <button type="submit" class="btn btn-primary">Save Configuration</button>
+                    </form>
+                    <p id="admin-feedback" class="alert-box" style="display:none; margin-top: 15px;"></p>
+                </section>
+
+            </main>
+        </div>
+
+        <div id="arbitrage-trade-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeArbitrageTradeModal()">&times;</span>
+                <h3 id="modal-arbitrage-opportunity-title">Initiate Trade</h3>
+                <div class="partner-list">
+                    <div class="partner-column"><h4>Suggested Sellers (Origin FOB)</h4><div id="suggested-sellers-list"></div></div>
+                    <div class="partner-column"><h4>Suggested Buyers (Destination CFR)</h4><div id="suggested-buyers-list"></div></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeArbitrageTradeModal()">Cancel</button>
+                    <button class="btn btn-primary" id="proceed-to-order-btn" disabled onclick="proceedToOrderCreationFromArbitrage()">Proceed to Order Creation</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+    <script>
+        // --- Dummy Data (Merged and Enhanced) ---
+        let DUMMY_DATA = {
+            users: {
+                "trader1": { "password": "password123", "role": "trader", "name": "Trader One" },
+                "analyst1": { "password": "password123", "role": "analyst", "name": "Analyst Priya" },
+                "admin1": { "password": "password123", "role": "admin", "name": "Admin User" },
+                "riskteam": { "password": "password123", "role": "risk_manager", "name": "Risk Officer" },
+                "masteruser": { "password": "password123", "role": "master", "name": "Master User" }
+            },
+            portfolio: [ /* From check.html (same as mvp_frontend) */
+                { "commodity": "Raw Cashew Nuts (RCN)", "quality": ">49 IVC", "quantity_mt": 200, "price_usd_mt": 1400, "purchase_date": "2025-05-10" },
+                { "commodity": "Black Matpe", "quality": "FAQ MYANMAR", "quantity_mt": 150, "price_usd_mt": 700, "purchase_date": "2025-05-15" },
+            ],
+            marketPrices: { // Merged from all files, with display fields
+                "Raw Cashew Nuts (RCN)": {
+                    "RCN >49 IVC FOB Abidjan": { "price": 1470, "last_updated": "2025-05-21 10:00", "commodity_display": "Raw Cashew Nuts (RCN)", "sub_variety_display": ">49 LBS", "origin_display": "Ivory Coast", "incoterm_destination_display": "FOB Abidjan", "basis": "+15 vs LY" },
+                    "RCN >49 INDIA CFR Tuticorin": { "price": 1675, "last_updated": "2025-05-21 10:00", "commodity_display": "Raw Cashew Nuts (RCN)", "sub_variety_display": ">49 LBS", "origin_display": "India", "incoterm_destination_display": "CFR Tuticorin", "basis": "+20 vs LY"  },
+                    "RCN >52 GHA CIF Tuticorin": { "price": 1655, "last_updated": "2025-05-21 10:35", "commodity_display": "Raw Cashew Nuts (RCN)", "sub_variety_display": ">52 LBS", "origin_display": "Ghana", "incoterm_destination_display": "CIF Tuticorin", "basis": "+25 vs LY"  },
+                    "RCN >52 IVC CIF Mundra": { "price": 1640, "last_updated": "2025-05-21 09:50", "commodity_display": "Raw Cashew Nuts (RCN)", "sub_variety_display": ">52 LBS", "origin_display": "Ivory Coast", "incoterm_destination_display": "CIF Mundra", "basis": "+10 vs LY"  },
+                    "RCN >52 GHA price_24h_ago": 1705, // Internal, not for display table
+                    "RCN >49 SEN CFR Tuticorin": { "price": 1580, "last_updated": "2025-05-21 10:32", "commodity_display": "Raw Cashew Nuts (RCN)", "sub_variety_display": ">49 LBS", "origin_display": "Senegal", "incoterm_destination_display": "CFR Tuticorin", "basis": "-5 vs LY"  },
+                    "RCN >52 LBS Benin FOB Cotonou": { "price": 1480, "last_updated": "2025-05-20 16:15", "commodity_display": "Raw Cashew Nuts (RCN)", "sub_variety_display": ">52 LBS", "origin_display": "Benin", "incoterm_destination_display": "FOB Cotonou", "basis": "Flat vs LY"  },
+                    "RCN >49 LBS IVC FOB Abidjan": { "price": 1450, "last_updated": "2025-05-21 11:00", "commodity_display": "Raw Cashew Nuts (RCN)", "sub_variety_display": ">49 LBS", "origin_display": "Ivory Coast", "incoterm_destination_display": "FOB Abidjan", "basis": "+5 vs LY"  },
+                },
+                "Black Matpe": {
+                    "BM FAQ MYANMAR FOB Yangon": { "price": 780, "last_updated": "2025-05-21 11:30", "commodity_display": "Black Matpe", "sub_variety_display": "FAQ", "origin_display": "Myanmar", "incoterm_destination_display": "FOB Yangon", "basis": "+30 vs LY"  },
+                    "BM FAQ INDIA CFR Mumbai": { "price": 820, "last_updated": "2025-05-21 11:30", "commodity_display": "Black Matpe", "sub_variety_display": "FAQ", "origin_display": "India", "incoterm_destination_display": "CFR Mumbai", "basis": "+20 vs LY"  },
+                    "BM FAQ MYA FOB Yangon": { "price": 720, "last_updated": "2025-05-21 11:30", "commodity_display": "Black Matpe", "sub_variety_display": "FAQ", "origin_display": "Myanmar", "incoterm_destination_display": "FOB Yangon", "basis": "-10 vs LY"  }, // Note: Key was slightly different in one file
+                },
+                "Desi Chickpeas": {
+                    "DC 9mm AUS FOB": { "price": 870, "last_updated": "2025-05-21 12:00", "commodity_display": "Desi Chickpeas", "sub_variety_display": "9mm", "origin_display": "Australia", "incoterm_destination_display": "FOB", "basis": "+40 vs LY"  },
+                    "DC 9mm UAE CFR Jebel Ali": { "price": 900, "last_updated": "2025-05-21 12:00", "commodity_display": "Desi Chickpeas", "sub_variety_display": "9mm", "origin_display": "UAE", "incoterm_destination_display": "CFR Jebel Ali", "basis": "+35 vs LY"  },
+                }
+            },
+            counterparties: { // From check.html, with added contact details
+                "Global Grain Impex": {"id": "CP001", "name": "Global Grain Impex", "location": "Mumbai, India", "type": "Buyer", "internal_rating": "High Risk", "dnb_score": 5, "credit_limit": 500000, "current_exposure": 460000, "payment_history": "Often late (Avg. 5 days after due)", "total_trade_volume_12m": 1200000, "active_deals": 2, "primary_commodities_bought": ["Raw Cashew Nuts (RCN)", "Black Matpe"], "key_origins_historically": ["Ivory Coast", "Ghana", "Myanmar"], "recent_activity_shift": "Increased inquiries for Tanzanian RCN.", "contact_person": "Mr. Vikram Singh", "email": "vikram.singh@globalgrain.com", "phone": "+91-22-12345678", "address": "12 Business Park, Mumbai, Maharashtra, India"},
+                "Afrique Nuts SA": {"id": "CP002", "name": "Afrique Nuts SA", "location": "Abidjan, Ivory Coast", "type": "Seller","internal_rating": "Low Risk", "dnb_score": 7, "credit_limit": 1000000, "current_exposure": 250000, "payment_history": "Avg. 2 days before due date.", "total_trade_volume_12m": 2800000, "active_deals": 3, "primary_commodities_bought": ["Raw Cashew Nuts (RCN) >49 LBS", "Raw Cashew Nuts (RCN) >52 LBS"], "key_origins_historically": ["Ivory Coast", "Ghana", "Tanzania"], "recent_activity_shift": "Expanding to Benin RCN.", "contact_person": "Mme. Aicha Kone", "email": "a.kone@afriquenuts.ci", "phone": "+225-01-987654", "address": "Zone Industrielle, BP 100, Abidjan, CIV"},
+                "Raj Exporters": {"id": "CP003", "name": "Raj Exporters", "location": "Mumbai, India", "type": "Buyer/Seller", "internal_rating": "Low Risk", "dnb_score": 8, "credit_limit": 750000, "current_exposure": 100000, "payment_history": "Always on time", "total_trade_volume_12m": 1500000, "active_deals": 1, "primary_commodities_bought": ["Black Matpe", "Desi Chickpeas"], "key_origins_historically": ["Myanmar", "Australia"], "recent_activity_shift": "No significant shifts.", "contact_person": "Mr. Raj Patel", "email": "raj.patel@rajexports.in", "phone": "+91-22-87654321", "address": "3 Export House, Navi Mumbai, India"},
+                "West Coast Trading Co": { "id": "CP004", "name": "West Coast Trading Co", "location": "Accra, Ghana", "type": "Seller", "internal_rating": "Medium Risk", "dnb_score": 6, "credit_limit": 800000, "current_exposure": 300000, "payment_history": "Consistent, smaller trades", "total_trade_volume_12m": 1000000, "active_deals": 1, "primary_commodities_bought": ["Raw Cashew Nuts (RCN)"], "key_origins_historically": ["Ghana"], "recent_activity_shift": "Expanding to IVC.", "contact_person":"Ms. Ama K.", "email":"ama@westcoast.gh", "phone":"+233-12345678", "address":"7 Trade Rd, Accra, Ghana" },
+                "Eastern Importers Ltd": { "id": "CP005", "name": "Eastern Importers Ltd", "location": "Dhaka, Bangladesh", "type": "Buyer", "internal_rating": "Low Risk", "dnb_score": 7, "credit_limit": 600000, "current_exposure": 50000, "payment_history": "Excellent", "total_trade_volume_12m": 700000, "active_deals": 0, "primary_commodities_bought": ["Black Matpe"], "key_origins_historically": ["Myanmar"], "recent_activity_shift": "Increasing Black Matpe volume.", "contact_person":"Mr. Farouk H.", "email":"farouk@easternimp.bd", "phone":"+880-171122334", "address":"1 Import Way, Dhaka, Bangladesh"  }
+            },
+            marketChatterLog: [], // Populated by Analyst Workbench
+            deals: [], // Populated by Deal Creation
+            commoditiesConfig: { // Merged and enhanced from all files
+                "Raw Cashew Nuts (RCN)": {
+                    "full_name": "Raw Cashew Nuts", "short_name": "RCN", "sub_varieties": [">52 LBS", ">49 LBS", ">45 LBS"],
+                    "quality_params": { "Outturn": "45-53%", "Nut Count": "180-220/kg", "Moisture": "<10%", "Defective": "<10%" },
+                    "standard_origins": ["Ghana", "Ivory Coast", "Benin", "Senegal", "Tanzania", "Nigeria", "Guinea-Bissau"],
+                    "harvest_calendar": {
+                        "Ghana": { "start": "Mar", "end": "Jun", "peak": "Apr-May", "crop_commentary": "Main harvest ongoing. Favorable weather. Good outturn expected." },
+                        "Ivory Coast": { "start": "Feb", "end": "May", "peak": "Mar-Apr", "crop_commentary": "Harvest nearing completion. Some rain impact in San Pedro." },
+                        "Benin": { "start": "Mar", "end": "Jun", "peak": "Apr-May", "crop_commentary": "Steady progress. Port congestion at Cotonou is a watchpoint." },
+                        "Tanzania": { "start": "Oct", "end": "Jan", "peak": "Nov-Dec", "crop_commentary": "Off-season. Next crop planting underway."}
+                    },
+                    "supply_demand_analysis": "Global RCN demand robust, especially India/Vietnam. West African supply strong, freight costs volatile. USDA (mock): Global 2025 production +2%.",
+                    "typical_specs": { ">52 LBS": "Outturn: 52-53%, Nut Count: 180-190", ">49 LBS": "Outturn: 49-51%, Nut Count: 190-210", ">45 LBS": "Outturn: 45-48%, Nut Count: 210-220"},
+                    "expected_harvest_yoy": "+2.5%"
+                },
+                "Black Matpe": {
+                    "full_name": "Black Matpe (Urad Dal)", "short_name": "BM", "sub_varieties": ["FAQ", "SQ"],
+                    "quality_params": { "Purity": ">99%", "Moisture": "<14%", "Admixture": "<1%" },
+                    "standard_origins": ["Myanmar", "India"],
+                     "harvest_calendar": { "Myanmar": { "start": "Feb", "end": "Apr", "peak": "Mar", "crop_commentary": "Harvest complete. Yields slightly below average. Quality good." } },
+                    "supply_demand_analysis": "Consistent Indian demand. Myanmar supply stable, logistics can be a factor. Indian domestic crop outlook is key.",
+                    "typical_specs": { "FAQ": "Fair Average Quality, machine cleaned.", "SQ": "Sortex Quality, higher purity." },
+                    "expected_harvest_yoy": "-1.0%"
+                },
+                "Desi Chickpeas": {
+                    "full_name": "Desi Chickpeas (Kala Chana)", "short_name": "DC", "sub_varieties": ["9mm", "8mm", "7mm"],
+                    "quality_params": { "Size": "7mm+", "Purity": ">99%", "Moisture": "<12%" },
+                    "standard_origins": ["Australia", "India", "Canada", "Tanzania"],
+                    "harvest_calendar": { "Australia": { "start": "Oct", "end": "Dec", "peak": "Nov", "crop_commentary": "Planting for next season underway. Current stocks moderate." } },
+                    "supply_demand_analysis": "Steady global demand. Australia major exporter. Middle East & Indian demand key. Weather in key regions crucial.",
+                    "typical_specs": { "9mm": "Min 9mm screen, bold size.", "8mm": "Min 8mm screen.", "7mm": "Min 7mm screen." },
+                    "expected_harvest_yoy": "+3.0%"
+                }
+            },
+            shipmentData: [ // Merged and enhanced
+                { "vessel": "Ocean Queen", "commodity": "Raw Cashew Nuts (RCN)", "quantity_mt": 150, "eta": "2025-05-25", "origin": "Abidjan, IVC", "destination": "Tuticorin", "status": "At Sea", "action": "Prepare Discharge Docs", "payment_due_to": "Afrique Nuts SA", "payment_amount": 75000, "payment_due_date": "2025-05-28", "ai_est_load_min": 150, "ai_est_load_max": 150, "ai_est_quality": ">49 LBS", "weekly_change": "+2%", "sentiment": "Bullish" },
+                { "vessel": "African Trader", "commodity": "Raw Cashew Nuts (RCN)", "eta": "2025-05-28", "origin": "Tema, Ghana", "destination": "Tuticorin", "ai_est_load_min": 7000, "ai_est_load_max": 8500, "ai_est_quality": "Likely >50% >52 LBS", "weekly_change": "+5%", "sentiment": "Bullish" },
+                { "vessel": "Asia Sun", "commodity": "Raw Cashew Nuts (RCN)", "eta": "2025-06-02", "origin": "Dakar, Senegal", "destination": "Tuticorin", "ai_est_load_min": 4000, "ai_est_load_max": 5000, "ai_est_quality": "Mainly >49 LBS", "weekly_change": "+1%", "sentiment": "Neutral" },
+                { "vessel": "Pacific Express", "commodity": "Black Matpe", "eta": "2025-06-05", "origin": "Yangon, Myanmar", "destination": "Mumbai", "ai_est_load_min": 3000, "ai_est_load_max": 3500, "ai_est_quality": "FAQ", "weekly_change": "-1%", "sentiment": "Neutral" },
+                { "vessel": "Indian Ocean", "commodity": "Desi Chickpeas", "eta": "2025-06-10", "origin": "Fremantle, Australia", "destination": "Jebel Ali", "ai_est_load_min": 6000, "ai_est_load_max": 7000, "ai_est_quality": "9mm", "weekly_change": "+0%", "sentiment": "Neutral" },
+            ],
+            initialDeals: [ // From check.html (same as mvp_frontend)
+                { "deal_id": "DEAL001", "mandate_name": "June RCN CIV Import", "counterparty": "Global Grain Impex", "commodity": "Raw Cashew Nuts (RCN)", "sub_variety_quality": ">52 LBS", "origin": "Ghana", "quantity_mt": 200, "price_usd_mt": 1600, "incoterm": "CIF", "destination_port": "Tuticorin", "shipment_window": "June 2025", "status": "Confirmed", "created_by": "Trader One", "created_date": "2025-05-10", "estimated_mtm": 12000 }
+            ],
+            arbitrageOpportunities: [ /* From check.html */
+                { id: "ARB001", commodity: "RCN", origin: "IVC", destination: "INDIA", supplyChainCosts: 160, netArbitrage: 65, confidence: "High (85%)", buyLegDetails: { commodity: "Raw Cashew Nuts (RCN)", quality: ">49 LBS", origin: "Ivory Coast", incoterm: "FOB Abidjan", price: 1450 }, sellLegDetails: { commodity: "Raw Cashew Nuts (RCN)", quality: ">49 LBS", destination: "Tuticorin", incoterm: "CFR Tuticorin", price: 1680 } },
+                { id: "ARB002", commodity: "Black Matpe", origin: "MYANMAR", destination: "INDIA", supplyChainCosts: 50, netArbitrage: 40, confidence: "Medium (70%)", buyLegDetails: { commodity: "Black Matpe", quality: "FAQ", origin: "Myanmar", incoterm: "FOB Yangon", price: 720 }, sellLegDetails: { commodity: "Black Matpe", quality: "FAQ", destination: "Mumbai", incoterm: "CFR Mumbai", price: 810 } },
+            ],
+            marketSentiment: [ /* Merged from all files */
+                { commodity: "Raw Cashew Nuts (RCN)", geography: "Tuticorin", value: 80, label: "Strongly Bullish", zone: "green", reasons: ["High import demand from India", "Limited immediate vessel availability", "Firm farmer holding in Africa"] },
+                { commodity: "Black Matpe", geography: "Mumbai", value: 55, label: "Neutral", zone: "yellow", reasons: ["Stable domestic consumption", "Moderate supply from Myanmar", "FX volatility creating uncertainty"] },
+                { commodity: "Desi Chickpeas", geography: "Jebel Ali", value: 40, label: "Slightly Bearish", zone: "orange", reasons: ["Upcoming new crop from Australia", "Weakening demand from Middle East", "Increased stock levels at destination"] },
+                { commodity: "Raw Cashew Nuts (RCN)", geography: "Abidjan", value: 70, label: "Bullish", zone: "green", reasons: ["Early harvest optimism", "Good quality reports", "Strong forward contracts from Asia"] },
+                { commodity: "Black Matpe", geography: "Yangon", value: 60, label: "Neutral", zone: "yellow", reasons: ["Stable local prices", "Minor logistical challenges", "Consistent export volume"] },
+            ],
+            newsFeed: { // Merged structure, content from all files
+                news: [
+                    { id: 1, type: "News", commodity: "Raw Cashew Nuts (RCN)", geography: "West Africa", timestamp: "2025-05-21T14:00:00Z", sentiment_score: 0.8, content: "Reuters: West African RCN crop outlook positive despite early scattered rains.", tags: ["#RCN", "#WestAfrica", "#CropOutlook"] },
+                    { id: 2, type: "News", commodity: "Black Matpe", geography: "India", timestamp: "2025-05-20T10:30:00Z", sentiment_score: 0.6, content: "Economic Times: Indian pulse prices remain firm due to consistent domestic demand.", tags: ["#BlackMatpe", "#India", "#Prices"] },
+                    { id: 3, type: "News", commodity: "Desi Chickpeas", geography: "Australia", timestamp: "2025-05-19T09:00:00Z", sentiment_score: 0.4, content: "Farm Weekly: Australian chickpea harvest estimates revised upwards.", tags: ["#DesiChickpeas", "#Australia", "#Harvest"] },
+                    { id: 4, type: "News", commodity: "Raw Cashew Nuts (RCN)", geography: "Vietnam", timestamp: "2025-05-18T16:00:00Z", sentiment_score: 0.7, content: "Agri-News: Vietnamese processors actively seeking new RCN contracts.", tags: ["#RCN", "#Vietnam", "#Demand"] }
+                ],
+                socialMedia: [
+                    { id: 101, type: "Social Media", commodity: "Raw Cashew Nuts (RCN)", geography: "Global", timestamp: "2025-05-21T15:15:00Z", sentiment_score: 0.75, content: "Twitter Chatter: Buyers in Vietnam actively seeking >52 LBS material.", tags: ["#RCN", "#Vietnam", "#Demand"] },
+                    { id: 102, type: "Social Media", commodity: "Black Matpe", geography: "Myanmar", timestamp: "2025-05-20T11:00:00Z", sentiment_score: 0.5, content: "LinkedIn Post: Reports of slight logistics bottlenecks at Yangon port this week.", tags: ["#BlackMatpe", "#Myanmar", "#Logistics"] },
+                    { id: 103, type: "Social Media", commodity: "Desi Chickpeas", geography: "India", timestamp: "2025-05-19T10:00:00Z", sentiment_score: 0.35, content: "Facebook Group: Farmers concerned about early heat affecting chickpea yields in some areas.", tags:["#DesiChickpeas", "#India", "#WeatherConcern"]}
+                ],
+                internalChatter: [ // Populated by Analyst Workbench and S&D Chatter
+                     { id: 201, type: "Internal Chatter", commodity: "Black Matpe", geography: "Mumbai", timestamp: "2025-05-21T10:00:00Z", sentiment_score: 0.9, content: "Market call with Raj Exporters (Mumbai): Hearing strong demand for Black Matpe FAQ ex-Yangon for June shipment. They are looking to cover 500MT. Indicated bids around $780 CFR.", tags: ["#BlackMatpeFAQ", "#Myanmar(Yangon)", "#India(Mumbai)", "#RajExporters", "#Bullish", "#DemandHigh"] },
+                ]
+            },
+            suggestedPartners: { /* From check.html */
+                "ARB001": { sellers: [{ name: "AgriCorp IVC", profile_link: "CP002", reason: "Best historic payment terms" }], buyers: [{ name: "Raj Exporters", profile_link: "CP003", reason: "Pays best" }] },
+                "ARB002": { sellers: [{ name: "Myanmar Agri Trade", profile_link: "CP002", reason: "Lowest Cost of Carry" }], buyers: [{ name: "Eastern Importers Ltd", profile_link: "CP005", reason: "Increasing volume" }] },
+            },
+            counterpartyTrends: { // From sd_drivers
+                "Raw Cashew Nuts (RCN)": [
+                    { name: "Global Grain Impex (Buyer)", trend: "Increased activity in >52 LBS RCN for Indian consumption. AI suggests seasonal demand peak.", type: "buyer" },
+                    { name: "Afrique Nuts SA (Seller)", trend: "Consistent supply from Ivory Coast. AI notes slight dip in forward sales due to firm holding.", type: "seller" },
+                ],
+                "Black Matpe": [ { name: "Eastern Importers Ltd (Buyer)", trend: "Consistent high volume buying from Myanmar.", type: "buyer" } ],
+                "Desi Chickpeas": [ { name: "Middle East Foodstuff (Buyer)", trend: "Slight decrease in immediate demand.", type: "buyer" } ]
+            },
+            tradeSuggestions: { // From sd_drivers
+                "Raw Cashew Nuts (RCN)": {
+                    sellTo: [{ name: "Raj Exporters (Mumbai)", reason: "Best historic payment terms; AI detects strong immediate demand.", score: 95 }],
+                    buyFrom: [{ name: "AgriCorp IVC", reason: "AI projects favorable FOB prices from Abidjan.", score: 92 }]
+                },
+                "Black Matpe": {
+                    sellTo: [{ name: "Eastern Importers Ltd", reason: "AI indicates increasing Black Matpe volume.", score: 93 }],
+                    buyFrom: [{ name: "Myanmar Agri Trade", reason: "Lowest Cost of Carry for current shipment window.", score: 91 }]
+                },
+                "Desi Chickpeas": {
+                    sellTo: [{ name: "Middle East Foodstuff", reason: "Highest historical demand from UAE market.", score: 89 }],
+                    buyFrom: [{ name: "AusGrain Exporters", reason: "AI projects competitive freight rates for UAE route.", score: 90 }]
+                }
+            },
+            commodityRatios: { // From sd_drivers
+                "Raw Cashew Nuts (RCN)": [
+                    { name: "Stock-to-Use Ratio", value: "22%", tooltip: "Indicates the level of ending stocks in relation to total use. Lower ratio suggests tighter supply. AI flags current levels as bullish." },
+                    { name: "Cost of Carry", value: "$15/MT/Month", tooltip: "Cost of holding inventory. Current CoC is moderate." },
+                ],
+                "Black Matpe": [ { name: "Stock-to-Use Ratio", value: "18%", tooltip: "Tighter supply for Black Matpe compared to last year." } ],
+                "Desi Chickpeas": [ { name: "Stock-to-Use Ratio", value: "28%", tooltip: "Higher-than-average stock-to-use ratio, comfortable supply." } ]
+            }
+        };
+
+        let currentUser = null;
+        let currentVisibleSection = 'dashboard'; // Tracks the currently displayed main section
+        let dealCreationCurrentStep = 1;
+        let currentDashboardNewsTab = 'news'; // For dashboard news feed
+        let currentSdDriversNewsTab = 'news'; // For S&D Drivers news feed
+        let selectedArbitrageOpp = null;
+        let selectedArbSeller = null;
+        let selectedArbBuyer = null;
+        let currentSelectedSdCommodity = "Raw Cashew Nuts (RCN)"; // Default for S&D Drivers page
+
+        // --- Utility Functions ---
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
+        }
+        function getTodayDate() {
+            return new Date().toISOString().split('T')[0];
+        }
+        function getFormattedTimestamp(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
+        }
+
+        // --- Login/Logout & App Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('login-form').addEventListener('submit', handleLogin);
+            document.getElementById('logout-btn').addEventListener('click', handleLogout);
+            document.querySelectorAll('.sidebar-nav a').forEach(link => link.addEventListener('click', (e) => { e.preventDefault(); showSection(link.dataset.section); }));
+            
+            // Dashboard News Tabs
+            document.querySelectorAll('#dashboard-news-tabs .tab-nav-item').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('#dashboard-news-tabs .tab-nav-item').forEach(item => item.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentDashboardNewsTab = tab.dataset.tab;
+                    filterNewsFeed(); // Render dashboard news
+                });
+            });
+
+            // S&D Drivers News Tabs
+            document.querySelectorAll('#sd-market-intelligence-tabs .tab-nav-item').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('#sd-market-intelligence-tabs .tab-nav-item').forEach(item => item.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentSdDriversNewsTab = tab.dataset.tab;
+                    filterNewsFeedSD(); // Render S&D news
+                });
+            });
+            
+            // Analyst Workbench Tabs
+            document.querySelectorAll('#analyst-workbench .tab-nav-item').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('#analyst-workbench .tab-nav-item').forEach(item => item.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.querySelectorAll('#analyst-workbench .tab-content').forEach(content => content.classList.remove('active'));
+                    document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+                });
+            });
+
+            initApp();
+        });
+
+        function initApp() {
+            const storedUser = sessionStorage.getItem('hectarCurrentUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                renderMainAppUI();
+            } else {
+                showLoginPage();
+            }
+            DUMMY_DATA.deals = [...DUMMY_DATA.initialDeals]; // Reset deals for demo
+            populateSharedFilters(); // Populate filters used across sections
+        }
+
+        function showLoginPage() {
+            document.getElementById('login-page').style.display = 'flex';
+            document.getElementById('main-app').style.display = 'none';
+            document.getElementById('login-error').textContent = '';
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const user = DUMMY_DATA.users[username];
+            if (user && user.password === password) {
+                currentUser = user;
+                sessionStorage.setItem('hectarCurrentUser', JSON.stringify(currentUser));
+                renderMainAppUI();
+            } else {
+                document.getElementById('login-error').textContent = 'Invalid username or password.';
+            }
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            sessionStorage.removeItem('hectarCurrentUser');
+            showLoginPage();
+        }
+        
+        function hasPermission(requiredRole) {
+            if (!currentUser) return false;
+            return currentUser.role === "master" || currentUser.role === requiredRole;
+        }
+
+        function renderMainAppUI() {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+            document.getElementById('page-title').textContent = `${currentUser.name}'s Dashboard`;
+
+            document.querySelectorAll('[data-role-visibility]').forEach(item => {
+                item.style.display = hasPermission(item.dataset.roleVisibility) ? 'block' : 'none';
+            });
+            showSection('dashboard'); // Default to dashboard
+        }
+        
+        function populateSharedFilters() {
+            // Populate commodity dropdowns (Deal Creation, Dashboard News, S&D Drivers main, S&D News, Supply Predictor)
+            const commodityNames = Object.keys(DUMMY_DATA.commoditiesConfig);
+            const selectsToPopulate = ['deal-commodity', 'news-filter-commodity', 'commodity-select-sd-drivers', 'sd-news-filter-commodity-hidden', 'sd-supply-filter-commodity-hidden', 'supply-filter-commodity'];
+            
+            selectsToPopulate.forEach(selectId => {
+                const selectElement = document.getElementById(selectId);
+                if (selectElement) {
+                    selectElement.innerHTML = selectId.includes('filter') || selectId.includes('supply-filter-commodity') ? '<option value="">All Commodities</option>' : '<option value="">Select Commodity</option>'; // Keep "All" for filters
+                    commodityNames.forEach(name => {
+                        const option = document.createElement('option');
+                        option.value = name;
+                        option.textContent = name;
+                        selectElement.appendChild(option);
+                    });
+                }
+            });
+             // Populate counterparty dropdowns (Deal Creation, Counterparty Directory)
+            const counterpartyNames = Object.keys(DUMMY_DATA.counterparties);
+            const cpSelects = ['deal-counterparty-name', 'counterparty-select'];
+            cpSelects.forEach(selectId => {
+                const selectElement = document.getElementById(selectId);
+                if(selectElement){
+                    selectElement.innerHTML = '<option value="">Select Counterparty</option>';
+                     if(selectId === 'deal-counterparty-name') { // Add "Add New" option for deal creation
+                        const addNewOpt = document.createElement('option');
+                        addNewOpt.value = "add_new";
+                        addNewOpt.textContent = "-- Add New Counterparty --";
+                        selectElement.appendChild(addNewOpt);
+                    }
+                    counterpartyNames.forEach(name => {
+                        const option = document.createElement('option');
+                        option.value = name;
+                        option.textContent = name;
+                        selectElement.appendChild(option);
+                    });
+                }
+            });
+
+            // Populate geography filters (Dashboard News, S&D News)
+            const allGeographies = new Set();
+            Object.values(DUMMY_DATA.newsFeed).flat().forEach(item => { if (item.geography) allGeographies.add(item.geography); });
+            ['news-filter-geography', 'sd-news-filter-geography'].forEach(selectId => {
+                const selectElement = document.getElementById(selectId);
+                if(selectElement){
+                    selectElement.innerHTML = '<option value="">All Geographies</option>';
+                    Array.from(allGeographies).sort().forEach(geo => {
+                        const option = document.createElement('option');
+                        option.value = geo;
+                        option.textContent = geo;
+                        selectElement.appendChild(option);
+                    });
+                }
+            });
+
+            // Populate port filters (Supply Predictor, S&D Supply)
+            const allPorts = new Set();
+            DUMMY_DATA.shipmentData.forEach(s => { if(s.destination) allPorts.add(s.destination); if(s.origin) allPorts.add(s.origin); });
+             ['supply-filter-port', 'sd-supply-filter-port'].forEach(selectId => {
+                const selectElement = document.getElementById(selectId);
+                if(selectElement){
+                    selectElement.innerHTML = '<option value="">All Ports</option>';
+                    Array.from(allPorts).sort().forEach(port => {
+                        const option = document.createElement('option');
+                        option.value = port;
+                        option.textContent = port;
+                        selectElement.appendChild(option);
+                    });
+                }
+            });
+        }
+
+
+        // --- Section Navigation & Rendering ---
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active'));
+            document.querySelector(`.sidebar-nav a[data-section="${sectionId}"]`).classList.add('active');
+            currentVisibleSection = sectionId;
+
+            let title = `${currentUser.name}'s Platform`; // Default title
+            const sectionLink = document.querySelector(`.sidebar-nav a[data-section="${sectionId}"] span`);
+            if (sectionLink) title = sectionLink.textContent;
+            document.getElementById('page-title').textContent = title;
+
+            // Call specific render functions
+            if (sectionId === 'dashboard') renderDashboard();
+            else if (sectionId === 'analyst-workbench') renderAnalystWorkbench();
+            else if (sectionId === 'deal-creation') resetDealCreation(false); // false to not clear form if just switching
+            else if (sectionId === 'order-management') renderOrderManagement();
+            else if (sectionId === 'sd-drivers') {
+                document.getElementById('commodity-select-sd-drivers').value = currentSelectedSdCommodity; // Ensure dropdown matches
+                renderSNDDriversPage();
+            }
+            else if (sectionId === 'counterparty-directory') renderCounterpartyDirectory(); // Initial render, profile hidden
+            else if (sectionId === 'arbitrage-tracker') renderArbitrageTracker();
+            else if (sectionId === 'risk-dashboard') renderRiskDashboard();
+            else if (sectionId === 'supply-predictor') renderSupplyPredictor();
+            else if (sectionId === 'admin-panel') renderAdminPanel();
+        }
+
+        // --- Dashboard Rendering ---
+        function renderDashboard() {
+            // MTM Snapshot
+            const mtmValue = DUMMY_DATA.portfolio.reduce((sum, pos) => {
+                const marketPriceEntry = Object.values(DUMMY_DATA.marketPrices[pos.commodity] || {}).find(p => p.sub_variety_display === pos.quality && p.incoterm_destination_display.includes("CFR")) || 
+                                       Object.values(DUMMY_DATA.marketPrices[pos.commodity] || {}).find(p => p.sub_variety_display === pos.quality && p.incoterm_destination_display.includes("CIF"));
+                return sum + (marketPriceEntry ? (marketPriceEntry.price - pos.price_usd_mt) * pos.quantity_mt : 0);
+            }, 0);
+            document.getElementById('mtm-snapshot-value').textContent = formatCurrency(mtmValue);
+            document.getElementById('mtm-snapshot-value').classList.toggle('negative', mtmValue < 0);
+
+            // Top Arbitrage Opportunities
+            const arbTableBody = document.getElementById('arbitrage-table-body');
+            arbTableBody.innerHTML = '';
+            DUMMY_DATA.arbitrageOpportunities.slice(0, 3).forEach(opp => { // Show top 3
+                arbTableBody.innerHTML += `<tr><td>${opp.commodity}</td><td>${opp.origin}</td><td>${opp.destination}</td><td class="margin">${opp.netArbitrage >= 0 ? '+' : ''}${formatCurrency(opp.netArbitrage)}</td><td><button class="btn btn-primary btn-sm" onclick="openInitiateTradeModal('${opp.id}')">Initiate</button></td></tr>`;
+            });
+             if (arbTableBody.children.length === 0) arbTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-light);">No arbitrage opportunities found.</td></tr>`;
+
+
+            // Market Sentiment Gauges
+            renderMarketSentimentGauges(document.getElementById('market-sentiment-gauges'), DUMMY_DATA.marketSentiment.slice(0,3), 'dash'); // Show top 3
+
+            // Upcoming Shipments
+            const upcomingActionsEl = document.getElementById('upcoming-actions');
+            upcomingActionsEl.innerHTML = '';
+            DUMMY_DATA.shipmentData.filter(s => s.action || s.payment_due_date).slice(0, 2).forEach(s => { // Show top 2
+                 const etaDate = new Date(s.eta);
+                 const daysToEta = s.eta ? Math.ceil((etaDate - new Date()) / (1000 * 60 * 60 * 24)) : null;
+                 if(s.action && daysToEta !== null && daysToEta <=7) {
+                    upcomingActionsEl.innerHTML += `<div class="shipment-item"><strong>Vessel "${s.vessel}" (${s.commodity}) ETA ${s.destination}: ${s.eta} (${daysToEta} days)</strong><span class="action">Action: ${s.action}</span></div>`;
+                 }
+                 if(s.payment_due_date){
+                     const paymentDate = new Date(s.payment_due_date);
+                     const daysToPayment = Math.ceil((paymentDate - new Date()) / (1000 * 60 * 60 * 24));
+                     if(daysToPayment <=7) {
+                         upcomingActionsEl.innerHTML += `<div class="shipment-item"><strong>Payment due to "${s.payment_due_to}" (${formatCurrency(s.payment_amount)}): ${s.payment_due_date}</strong><span class="action">Action: Process Payment</span></div>`;
+                     }
+                 }
+            });
+             if (upcomingActionsEl.children.length === 0) upcomingActionsEl.innerHTML = `<p style="text-align:center;color:var(--text-light);">No immediate actions.</div>`;
+
+
+            filterNewsFeed(); // Initial render for dashboard news
+        }
+        
+        function renderMarketSentimentGauges(containerElement, sentimentData, prefix = 'senti') {
+            containerElement.innerHTML = '';
+            if (!sentimentData || sentimentData.length === 0) {
+                containerElement.innerHTML = '<p style="text-align:center;color:var(--text-light);">No sentiment data available.</p>';
+                return;
+            }
+            sentimentData.forEach((sentiment, index) => {
+                const gaugeId = `${prefix}-reasons-${index}`;
+                const gaugeHTML = `
+                    <div class="sentiment-gauge-container" onclick="toggleSentimentReasons('${gaugeId}')">
+                        <div class="sentiment-gauge">
+                            <span class="label">${sentiment.commodity.replace('Raw Cashew Nuts (RCN)', 'RCN')} ${sentiment.geography}:</span>
+                            <div class="value-bar"><div class="value-fill ${sentiment.zone.toLowerCase()}" style="width: ${sentiment.value}%;"></div></div>
+                            <span>${sentiment.label} (${sentiment.value}%)</span>
+                        </div>
+                        <div class="sentiment-reasons" id="${gaugeId}" style="display: none;">
+                            <h4>Top Reasons:</h4>
+                            <ul>${sentiment.reasons.map(reason => `<li>${reason}</li>`).join('')}</ul>
+                        </div>
+                    </div>`;
+                containerElement.innerHTML += gaugeHTML;
+            });
+        }
+
+        function toggleSentimentReasons(reasonsId) {
+            const reasonsDiv = document.getElementById(reasonsId);
+            if (reasonsDiv) reasonsDiv.style.display = reasonsDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function filterNewsFeed() { // For Dashboard
+            const commodity = document.getElementById('news-filter-commodity').value;
+            const geography = document.getElementById('news-filter-geography').value;
+            const sortBy = document.getElementById('news-sort-by').value;
+            const feedContainer = document.getElementById('news-feed-content');
+            renderNewsItems(feedContainer, DUMMY_DATA.newsFeed[currentDashboardNewsTab], commodity, geography, sortBy);
+        }
+        
+        function renderNewsItems(container, items, filterCommodity, filterGeography, sortBy) {
+            container.innerHTML = '';
+            let filtered = items;
+            if (filterCommodity) filtered = filtered.filter(item => item.commodity === filterCommodity);
+            if (filterGeography) filtered = filtered.filter(item => item.geography === filterGeography);
+
+            if (sortBy === 'recent') filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            else if (sortBy === 'importance') filtered.sort((a, b) => (b.sentiment_score || 0) - (a.sentiment_score || 0));
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 20px;">No items found.</p>';
+                return;
+            }
+            filtered.slice(0, 5).forEach(item => { // Show top 5
+                const sentimentLabel = item.sentiment_score > 0.6 ? "Bullish" : (item.sentiment_score < 0.4 ? "Bearish" : "Neutral");
+                const sentimentClass = sentimentLabel.toLowerCase();
+                container.innerHTML += `<div class="intelligence-item"><h4>${item.content} ${item.type !== 'Internal Chatter' ? `<span class="ai-sentiment ${sentimentClass}" style="font-size:0.7em; padding:2px 5px;">${sentimentLabel}</span>` : ''}</h4><p class="meta">Type: ${item.type} | Comm: ${item.commodity || 'N/A'} | Geo: ${item.geography || 'N/A'} | ${getFormattedTimestamp(item.timestamp)}</p></div>`;
+            });
+        }
+
+        // --- Analyst Workbench ---
+        function renderAnalystWorkbench() {
+            const tableBody = document.getElementById('price-entry-table-body');
+            tableBody.innerHTML = '';
+            Object.entries(DUMMY_DATA.marketPrices).forEach(([commodityKey, prices]) => {
+                Object.entries(prices).forEach(([fullKey, details]) => {
+                    if (details.price && details.commodity_display) { // Ensure it's a displayable entry
+                        tableBody.innerHTML += `<tr><td>${details.commodity_display}</td><td>${details.sub_variety_display}</td><td>${details.origin_display}</td><td>${details.incoterm_destination_display}</td><td>${details.price}</td><td>${details.basis || 'N/A'}</td><td>${details.last_updated}</td><td>Analyst Priya</td><td><input type="number" class="form-control form-control-sm" style="width: 80px;" onchange="quickUpdatePrice(this, '${commodityKey}', '${fullKey}')" placeholder="New"></td></tr>`;
+                    }
+                });
+            });
+            renderRecentChatterNotes();
+        }
+        function quickUpdatePrice(inputEl, commodityKey, fullKey) {
+            const newPrice = parseFloat(inputEl.value);
+            if (!isNaN(newPrice) && DUMMY_DATA.marketPrices[commodityKey]?.[fullKey]) {
+                DUMMY_DATA.marketPrices[commodityKey][fullKey].price = newPrice;
+                DUMMY_DATA.marketPrices[commodityKey][fullKey].last_updated = getFormattedTimestamp(new Date().toISOString());
+                inputEl.style.borderColor = 'var(--green-positive)';
+                setTimeout(() => { inputEl.style.borderColor = 'var(--border-light)'; renderAnalystWorkbench(); }, 1000);
+            } else {
+                inputEl.style.borderColor = 'var(--red-alert)';
+            }
+        }
+        function updatePriceFromSmartInput() {
+            const smartInput = document.getElementById('smart-price-input').value.trim().toUpperCase();
+            const newPrice = parseFloat(document.getElementById('new-price-value').value);
+            const feedbackEl = document.getElementById('smart-input-feedback');
+            if (!smartInput || isNaN(newPrice)) {
+                feedbackEl.textContent = 'Invalid input or price.'; feedbackEl.style.color = 'var(--red-alert)'; return;
+            }
+            let updated = false;
+            for (const commKey in DUMMY_DATA.marketPrices) {
+                for (const fullKey in DUMMY_DATA.marketPrices[commKey]) {
+                    if (fullKey.toUpperCase().includes(smartInput)) {
+                        DUMMY_DATA.marketPrices[commKey][fullKey].price = newPrice;
+                        DUMMY_DATA.marketPrices[commKey][fullKey].last_updated = getFormattedTimestamp(new Date().toISOString());
+                        feedbackEl.textContent = `Price for ${fullKey} updated to $${newPrice}.`; feedbackEl.style.color = 'var(--green-positive)';
+                        updated = true; renderAnalystWorkbench(); break;
+                    }
+                }
+                if (updated) break;
+            }
+            if (!updated) { feedbackEl.textContent = `No match found for "${smartInput}".`; feedbackEl.style.color = 'var(--red-alert)'; }
+            else { document.getElementById('smart-price-input').value = ''; document.getElementById('new-price-value').value = '';}
+        }
+        function processMarketChatter() { // For Analyst Workbench
+            const chatterText = document.getElementById('market-chatter-input').value;
+            if (!chatterText) return;
+            const commonTags = extractTagsFromText(chatterText); // Generic tag extraction
+            const note = { id: Date.now(), timestamp: getFormattedTimestamp(new Date().toISOString()), analyst: currentUser.name, content: chatterText, ai_tags: commonTags, type: "Internal Chatter", commodity: commonTags.find(t=>t.startsWith("#Comm"))?.substring(5) || "Unknown", geography: commonTags.find(t=>t.startsWith("#Geo"))?.substring(4) || "Unknown", sentiment_score: Math.random() };
+            DUMMY_DATA.marketChatterLog.unshift(note);
+            DUMMY_DATA.newsFeed.internalChatter.unshift(note); // Add to global news feed as well
+            
+            const tagsContainer = document.getElementById('ai-suggested-tags');
+            tagsContainer.innerHTML = commonTags.map(tag => `<span class="tag">${tag}</span>`).join('');
+            document.getElementById('market-chatter-input').value = '';
+            renderRecentChatterNotes();
+            if(currentVisibleSection === 'dashboard') filterNewsFeed(); // Update dashboard if visible
+            if(currentVisibleSection === 'sd-drivers') filterNewsFeedSD(); // Update S&D if visible
+        }
+         function renderRecentChatterNotes() {
+            const notesUl = document.getElementById('recent-chatter-notes');
+            notesUl.innerHTML = DUMMY_DATA.marketChatterLog.slice(0, 3).map(note => `<li><strong>${note.timestamp} by ${note.analyst}:</strong> ${note.content.substring(0,50)}... <br><small>Tags: ${note.ai_tags.join(', ')}</small></li>`).join('');
+        }
+        function extractTagsFromText(text) {
+            const tags = new Set();
+            Object.keys(DUMMY_DATA.commoditiesConfig).forEach(comm => { if (text.toLowerCase().includes(comm.toLowerCase().split(" (")[0])) tags.add(`#Comm${comm.split(" (")[0].replace(/\s/g, '')}`); });
+            ["India", "Myanmar", "Ghana", "Tuticorin", "Mumbai", "Abidjan", "Cotonou", "West Africa", "Vietnam", "Australia", "UAE", "Jebel Ali", "Yangon"].forEach(geo => { if (text.toLowerCase().includes(geo.toLowerCase())) tags.add(`#Geo${geo.replace(/\s/g, '')}`); });
+            if (text.match(/\b\d{2,3}\s?LBS\b/i)) tags.add("#QualityLBS");
+            if (text.match(/\b(CIF|FOB|CFR|EXW|DAP)\b/i)) tags.add(`#Inco${text.match(/\b(CIF|FOB|CFR|EXW|DAP)\b/i)[0].toUpperCase()}`);
+            if (text.toLowerCase().includes("demand")) tags.add("#Demand");
+            if (text.toLowerCase().includes("supply")) tags.add("#Supply");
+            if (text.toLowerCase().includes("price")) tags.add("#Price");
+            if (text.toLowerCase().includes("bullish") || text.toLowerCase().includes("strong")) tags.add("#SentimentBullish");
+            if (text.toLowerCase().includes("bearish") || text.toLowerCase().includes("weak")) tags.add("#SentimentBearish");
+            return Array.from(tags);
+        }
+
+
+        // --- Deal Creation / Management ---
+        function resetDealCreation(clearForm = true) {
+            if (clearForm) {
+                document.getElementById('deal-creation-form').reset();
+                // Reset selects to their initial placeholder state
+                document.getElementById('deal-commodity').value = "";
+                document.getElementById('deal-quality').innerHTML = '<option value="">Select Quality</option>';
+                document.getElementById('deal-origin').innerHTML = '<option value="">Select Origin</option>';
+                document.getElementById('deal-counterparty-name').value = "";
+                populateCounterpartyInfo(); // Clear dependent fields
+            }
+            document.getElementById('copilot-results').innerHTML = '<p>AI insights will appear here...</p>';
+            document.getElementById('deal-final-message').style.display = 'none';
+            document.getElementById('deal-contract-info').style.display = 'none';
+            document.getElementById('deal-review-buttons').style.display = 'flex';
+            document.getElementById('deal-post-creation-buttons').style.display = 'none';
+            navigateToDealStep(1); // Go to first step
+             // Repopulate commodity options for deal creation
+            const dealCommoditySelect = document.getElementById('deal-commodity');
+            const commodityNames = Object.keys(DUMMY_DATA.commoditiesConfig);
+            dealCommoditySelect.innerHTML = '<option value="">Select Commodity</option>';
+            commodityNames.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                dealCommoditySelect.appendChild(option);
+            });
+            dealCommoditySelect.onchange = populateDealQualityOriginOptions; // Re-attach listener
+        }
+
+        function populateDealQualityOriginOptions() {
+            const commodityName = document.getElementById('deal-commodity').value;
+            const qualitySelect = document.getElementById('deal-quality');
+            const originSelect = document.getElementById('deal-origin');
+            qualitySelect.innerHTML = '<option value="">Select Quality</option>';
+            originSelect.innerHTML = '<option value="">Select Origin</option>';
+            if (commodityName && DUMMY_DATA.commoditiesConfig[commodityName]) {
+                DUMMY_DATA.commoditiesConfig[commodityName].sub_varieties.forEach(sv => qualitySelect.innerHTML += `<option value="${sv}">${sv}</option>`);
+                DUMMY_DATA.commoditiesConfig[commodityName].standard_origins.forEach(o => originSelect.innerHTML += `<option value="${o}">${o}</option>`);
+            }
+        }
+        document.getElementById('deal-commodity').addEventListener('change', populateDealQualityOriginOptions);
+
+
+        function populateCounterpartyInfo() {
+            const cpName = document.getElementById('deal-counterparty-name').value;
+            const cp = DUMMY_DATA.counterparties[cpName];
+            if (cp) {
+                document.getElementById('deal-cp-contact-person').value = cp.contact_person || '';
+                document.getElementById('deal-cp-email').value = cp.email || '';
+                document.getElementById('deal-cp-phone').value = cp.phone || '';
+                document.getElementById('deal-cp-address').value = cp.address || '';
+                document.getElementById('deal-cp-internal-rating-display').textContent = cp.internal_rating || 'N/A';
+                document.getElementById('deal-cp-external-rating-display').textContent = `${cp.dnb_score || 'N/A'}/10 (Mock D&B)`;
+            } else if (cpName === "add_new") {
+                ['deal-cp-contact-person', 'deal-cp-email', 'deal-cp-phone', 'deal-cp-address'].forEach(id => document.getElementById(id).value = '');
+                 ['deal-cp-internal-rating-display', 'deal-cp-external-rating-display'].forEach(id => document.getElementById(id).textContent = 'N/A for new counterparty');
+            } else {
+                 ['deal-cp-contact-person', 'deal-cp-email', 'deal-cp-phone', 'deal-cp-address'].forEach(id => document.getElementById(id).value = '');
+                 ['deal-cp-internal-rating-display', 'deal-cp-external-rating-display'].forEach(id => document.getElementById(id).textContent = 'Select counterparty');
+            }
+        }
+
+
+        function navigateToDealStep(stepNumber) {
+            // Validate current step before proceeding (basic example)
+            if (stepNumber > dealCreationCurrentStep) {
+                if (dealCreationCurrentStep === 1) { // Validate Step 1
+                    if (!document.getElementById('deal-mandate-name').value || !document.getElementById('deal-commodity').value || !document.getElementById('deal-quantity').value || !document.getElementById('deal-price').value) {
+                        alert('Please fill all required fields in Deal Setup.'); return;
+                    }
+                } else if (dealCreationCurrentStep === 2) { // Validate Step 2
+                     if (!document.getElementById('deal-counterparty-name').value && document.getElementById('deal-counterparty-name').value !== "add_new") {
+                        alert('Please select or add a counterparty.'); return;
+                    }
+                     if (document.getElementById('deal-counterparty-name').value === "add_new" && !document.getElementById('deal-cp-contact-person').value) {
+                         alert('Please enter contact person for new counterparty.'); return;
+                     }
+                }
+            }
+
+
+            dealCreationCurrentStep = stepNumber;
+            document.querySelectorAll('#deal-creation-form > div[id^="deal-step-"]').forEach(el => el.style.display = 'none');
+            document.getElementById(`deal-step-${stepNumber}-content`).style.display = 'block';
+            document.querySelectorAll('.step-indicator .step').forEach(el => el.classList.remove('active', 'completed'));
+            for(let i=1; i < stepNumber; i++) {
+                document.getElementById(`deal-step-${i}-indicator`).classList.add('completed');
+            }
+            document.getElementById(`deal-step-${stepNumber}-indicator`).classList.add('active');
+
+            if (stepNumber === 3) runAICoPilot();
+            if (stepNumber === 4) populateDealReviewSummary();
+        }
+
+        function runAICoPilot() {
+            const resultsEl = document.getElementById('copilot-results');
+            resultsEl.innerHTML = '<p>AI Co-Pilot is analyzing your deal...</p>';
+            // Simulate API call
+            setTimeout(() => {
+                const cpName = document.getElementById('deal-counterparty-name').value;
+                const cp = DUMMY_DATA.counterparties[cpName];
+                const price = parseFloat(document.getElementById('deal-price').value);
+                const commodity = document.getElementById('deal-commodity').value;
+                const subVariety = document.getElementById('deal-quality').value;
+                const incoterm = document.getElementById('deal-incoterm').value;
+
+                let insights = `<h4>AI Co-Pilot Insights for Mandate: ${document.getElementById('deal-mandate-name').value}</h4>`;
+                // Counterparty Risk
+                if (cp) {
+                    const exposure = parseFloat(document.getElementById('deal-quantity').value) * price;
+                    const newTotalExposure = (cp.current_exposure || 0) + exposure;
+                    const limitExceeded = newTotalExposure > (cp.credit_limit || Infinity);
+                    insights += `<p><strong style="min-width:180px; display:inline-block;">Counterparty Risk:</strong> ${cp.internal_rating || 'N/A'}. ${limitExceeded ? `<span class="status-indicator fail">Credit limit potentially exceeded!</span>` : `<span class="status-indicator ok">Within credit limits.</span>`}</p>`;
+                } else if (cpName === "add_new") {
+                     insights += `<p><strong style="min-width:180px; display:inline-block;">Counterparty Risk:</strong> New counterparty - assessment pending KYC.</p>`;
+                } else {
+                    insights += `<p><strong style="min-width:180px; display:inline-block;">Counterparty Risk:</strong> No counterparty selected.</p>`;
+                }
+
+                // Price Benchmark
+                const marketPriceKey = Object.keys(DUMMY_DATA.marketPrices[commodity] || {}).find(k => k.includes(subVariety) && k.toUpperCase().includes(incoterm));
+                const marketPrice = marketPriceKey ? DUMMY_DATA.marketPrices[commodity][marketPriceKey].price : null;
+                if (marketPrice) {
+                    const diff = ((price - marketPrice) / marketPrice * 100).toFixed(1);
+                    insights += `<p><strong style="min-width:180px; display:inline-block;">Price Benchmark:</strong> Your price $${price} is ${diff}% ${diff > 0 ? 'above' : 'below'} market benchmark of $${marketPrice}. ${Math.abs(diff) > 5 ? `<span class="status-indicator warn">Review price.</span>` : `<span class="status-indicator ok">Competitive.</span>`}</p>`;
+                } else {
+                    insights += `<p><strong style="min-width:180px; display:inline-block;">Price Benchmark:</strong> No direct market benchmark found for ${subVariety} ${incoterm}.</p>`;
+                }
+                // Logistics
+                insights += `<p><strong style="min-width:180px; display:inline-block;">Logistics Feasibility:</strong> Standard route. Check vessel availability for ${document.getElementById('deal-shipment-period').value}.</p>`;
+                // Suggested Terms
+                insights += `<p><strong style="min-width:180px; display:inline-block;">AI Suggested Terms:</strong> Consider standard inspection clauses. Payment terms align with market if CAD or partial LC.</p>`;
+                // Overall Recommendation
+                insights += `<p><strong style="min-width:180px; display:inline-block;">Overall AI Reco:</strong> Proceed with caution if credit limit or price benchmark flagged. Otherwise, looks viable.</p>`;
+                resultsEl.innerHTML = insights;
+            }, 1500);
+        }
+
+        function populateDealReviewSummary() {
+            const summaryEl = document.getElementById('deal-review-summary');
+            let summaryHTML = `<h4>Mandate Summary: ${document.getElementById('deal-mandate-name').value}</h4>`;
+            
+            summaryHTML += `<div class="summary-section"><h5>Core Deal Details:</h5>`;
+            summaryHTML += `<p><strong>Mandate Type:</strong> ${document.getElementById('deal-mandate-type').value}</p>`;
+            summaryHTML += `<p><strong>Commodity:</strong> ${document.getElementById('deal-commodity').value} (${document.getElementById('deal-quality').value})</p>`;
+            summaryHTML += `<p><strong>Quantity:</strong> ${document.getElementById('deal-quantity').value} MT</p>`;
+            summaryHTML += `<p><strong>Target Price:</strong> ${formatCurrency(document.getElementById('deal-price').value)} /MT</p>`;
+            summaryHTML += `<p><strong>Incoterm:</strong> ${document.getElementById('deal-incoterm').value}</p>`;
+            summaryHTML += `<p><strong>Origin:</strong> ${document.getElementById('deal-origin').value}</p>`;
+            summaryHTML += `<p><strong>Destination:</strong> ${document.getElementById('deal-destination').value}</p>`;
+            summaryHTML += `<p><strong>Shipment Period:</strong> ${document.getElementById('deal-shipment-period').value}</p>`;
+            summaryHTML += `<p><strong>Payment Terms:</strong> ${document.getElementById('deal-payment-terms').value || 'N/A'}</p>`;
+            summaryHTML += `<p><strong>Other Terms:</strong> ${document.getElementById('deal-other-terms').value || 'None'}</p></div>`;
+
+            summaryHTML += `<div class="summary-section"><h5>Counterparty:</h5>`;
+            const cpName = document.getElementById('deal-counterparty-name').value;
+            summaryHTML += `<p><strong>Name:</strong> ${cpName === 'add_new' ? (document.getElementById('deal-cp-contact-person').value.split(" ")[1] ? document.getElementById('deal-cp-contact-person').value.split(" ")[1] + " Corp (New)" : "New Counterparty") : cpName}</p>`;
+            summaryHTML += `<p><strong>Contact:</strong> ${document.getElementById('deal-cp-contact-person').value || 'N/A'}</p>`;
+            summaryHTML += `<p><strong>Email:</strong> ${document.getElementById('deal-cp-email').value || 'N/A'}</p>`;
+            summaryHTML += `<p><strong>Phone:</strong> ${document.getElementById('deal-cp-phone').value || 'N/A'}</p></div>`;
+            
+            summaryHTML += `<div class="summary-section"><h5>AI Co-Pilot Summary:</h5>${document.getElementById('copilot-results').innerHTML.replace(/<h4>.*?<\/h4>/, '')}</div>`; // Remove AI co-pilot title
+            summaryEl.innerHTML = summaryHTML;
+        }
+
+        function confirmAndCreateDeal() {
+            const dealId = 'DEAL' + Math.random().toString(36).substr(2, 7).toUpperCase();
+            const newDeal = {
+                deal_id: dealId,
+                mandate_name: document.getElementById('deal-mandate-name').value,
+                counterparty: document.getElementById('deal-counterparty-name').value === 'add_new' ? (document.getElementById('deal-cp-contact-person').value || "New Counterparty") : document.getElementById('deal-counterparty-name').value,
+                commodity: document.getElementById('deal-commodity').value,
+                sub_variety_quality: document.getElementById('deal-quality').value,
+                origin: document.getElementById('deal-origin').value,
+                quantity_mt: parseFloat(document.getElementById('deal-quantity').value),
+                price_usd_mt: parseFloat(document.getElementById('deal-price').value),
+                incoterm: document.getElementById('deal-incoterm').value,
+                destination_port: document.getElementById('deal-destination').value,
+                shipment_window: document.getElementById('deal-shipment-period').value,
+                status: "Confirmed - Pending Docs",
+                created_by: currentUser.name,
+                created_date: getTodayDate(),
+                estimated_mtm: 0 // Calculate MTM later or based on benchmarks
+            };
+            DUMMY_DATA.deals.push(newDeal);
+            
+            // Update counterparty exposure if existing
+            const cpName = document.getElementById('deal-counterparty-name').value;
+            if (cpName !== "add_new" && DUMMY_DATA.counterparties[cpName]) {
+                DUMMY_DATA.counterparties[cpName].current_exposure += newDeal.quantity_mt * newDeal.price_usd_mt;
+                DUMMY_DATA.counterparties[cpName].active_deals = (DUMMY_DATA.counterparties[cpName].active_deals || 0) + 1;
+            }
+
+
+            document.getElementById('deal-final-message').textContent = `Deal ${dealId} successfully created!`;
+            document.getElementById('deal-final-message').style.display = 'block';
+            document.getElementById('deal-contract-info').style.display = 'block';
+            document.getElementById('deal-review-buttons').style.display = 'none';
+            document.getElementById('deal-post-creation-buttons').style.display = 'flex';
+            
+            if (currentVisibleSection === 'order-management') renderOrderManagement(); // Refresh if on order page
+        }
+
+        // --- Order Management ---
+        function renderOrderManagement() {
+            const tableBody = document.getElementById('order-management-table-body');
+            tableBody.innerHTML = '';
+            DUMMY_DATA.deals.forEach(deal => {
+                tableBody.innerHTML += `<tr><td>${deal.deal_id}</td><td>${deal.mandate_name}</td><td>${deal.counterparty}</td><td>${deal.commodity} (${deal.sub_variety_quality})</td><td>${deal.quantity_mt}</td><td>${formatCurrency(deal.quantity_mt * deal.price_usd_mt)}</td><td>${deal.shipment_window}</td><td>${deal.status}</td><td>${formatCurrency(deal.estimated_mtm)}</td></tr>`;
+            });
+            if (tableBody.children.length === 0) tableBody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:var(--text-light);">No orders found.</td></tr>`;
+        }
+
+        // --- S&D Drivers Section (Formerly Commodity Hub) ---
+        function renderSNDDriversPage() {
+            currentSelectedSdCommodity = document.getElementById('commodity-select-sd-drivers').value;
+            if (!currentSelectedSdCommodity) return;
+
+            // Update hidden commodity filters in S&D sections to match main selection
+            document.getElementById('sd-supply-filter-commodity-hidden').value = currentSelectedSdCommodity;
+            document.getElementById('sd-news-filter-commodity-hidden').value = currentSelectedSdCommodity;
+            
+            renderMarketDynamicsSD();
+            renderSupplyOutlookSD();
+            filterNewsFeedSD(); // Render news for selected S&D commodity
+            renderTraderRecommendationsSD();
+        }
+
+        function renderMarketDynamicsSD() {
+            const commodity = currentSelectedSdCommodity;
+            const pricesBody = document.getElementById('sd-prices-table-body');
+            pricesBody.innerHTML = '';
+            (DUMMY_DATA.marketPrices[commodity] ? Object.values(DUMMY_DATA.marketPrices[commodity]) : []).filter(p => p.price).forEach(p => {
+                pricesBody.innerHTML += `<tr><td>${p.origin_display}</td><td>${p.incoterm_destination_display}</td><td>${p.sub_variety_display}</td><td>$${p.price}</td><td>${p.last_updated}</td></tr>`;
+            });
+             if (pricesBody.children.length === 0) pricesBody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-light);">No price data.</td></tr>`;
+
+
+            const chartContainer = document.getElementById('price-chart-simulated');
+            chartContainer.innerHTML = '';
+            const chartPrices = (DUMMY_DATA.marketPrices[commodity] ? Object.values(DUMMY_DATA.marketPrices[commodity]) : []).filter(p => p.price && (p.incoterm_destination_display.includes("CFR") || p.incoterm_destination_display.includes("CIF"))).sort((a,b) => new Date(a.last_updated) - new Date(b.last_updated)).slice(-7); // Last 7 data points
+            if (chartPrices.length > 0) {
+                const maxPrice = Math.max(...chartPrices.map(p=>p.price)) * 1.1;
+                chartPrices.forEach((p, i) => {
+                    const barHeight = (p.price / maxPrice) * 100;
+                    let sentimentClass = (i > 0 && p.price > chartPrices[i-1].price) ? 'bullish' : ((i > 0 && p.price < chartPrices[i-1].price) ? 'bearish' : '');
+                    chartContainer.innerHTML += `<div class="chart-bar ${sentimentClass}" style="height: ${barHeight}%;"><div class="chart-bar-tooltip">$${p.price} (${p.sub_variety_display})</div><div class="chart-bar-label">${new Date(p.last_updated).toLocaleDateString('en-US', {month:'short', day:'numeric'})}</div></div>`;
+                });
+            } else {
+                chartContainer.innerHTML = `<div class="chart-placeholder">No chart data available.</div>`;
+            }
+            
+            renderMarketSentimentGauges(document.getElementById('sd-market-sentiment-gauges'), DUMMY_DATA.marketSentiment.filter(s => s.commodity === commodity), 'sd');
+
+            const ratiosBody = document.getElementById('sd-ratios-table-body');
+            ratiosBody.innerHTML = '';
+            (DUMMY_DATA.commodityRatios[commodity] || []).forEach(r => {
+                ratiosBody.innerHTML += `<tr><td><div class="tooltip-container">${r.name} <i class="fas fa-info-circle"></i><span class="tooltip-text">${r.tooltip}</span></div></td><td>${r.value}</td><td>${r.tooltip.split(". AI")[0]}.</td></tr>`;
+            });
+            if (ratiosBody.children.length === 0) ratiosBody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--text-light);">No ratios data.</td></tr>`;
+        }
+
+        function renderSupplyOutlookSD() {
+            const commodity = currentSelectedSdCommodity;
+            const config = DUMMY_DATA.commoditiesConfig[commodity];
+            const calendarDiv = document.getElementById('sd-harvest-calendar-display');
+            calendarDiv.innerHTML = '<h4>Key Harvest Seasons:</h4>';
+            if (config && config.harvest_calendar) {
+                Object.entries(config.harvest_calendar).forEach(([origin, season]) => {
+                    calendarDiv.innerHTML += `<div><strong>${origin}:</strong> ${season.start}-${season.end} (Peak: ${season.peak})</div>`;
+                });
+            } else {
+                 calendarDiv.innerHTML += '<p>No harvest data.</p>';
+            }
+            document.getElementById('sd-harvest-yoy-change').textContent = config?.expected_harvest_yoy || "N/A";
+            document.getElementById('sd-harvest-yoy-change').className = `change ${(config?.expected_harvest_yoy?.includes('+') ? 'supply-change-positive' : (config?.expected_harvest_yoy?.includes('-') ? 'supply-change-negative' : ''))}`;
+
+
+            renderSupplyPredictorTableSD(); // Renders the vessel arrivals table
+
+            const commentaryDiv = document.getElementById('sd-crop-commentary-content');
+            commentaryDiv.innerHTML = '';
+            let foundCommentary = false;
+            if (config && config.harvest_calendar) {
+                Object.entries(config.harvest_calendar).forEach(([origin, season]) => {
+                    if(season.crop_commentary) {
+                        commentaryDiv.innerHTML += `<div class="intelligence-item"><h4>Crop Update: ${origin}</h4><p>${season.crop_commentary}</p></div>`;
+                        foundCommentary = true;
+                    }
+                });
+            }
+            if (!foundCommentary) commentaryDiv.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:10px;">No crop commentary.</p>';
+        }
+        
+        function renderSupplyPredictorTableSD() { // For S&D Drivers page
+            const commodity = currentSelectedSdCommodity;
+            const port = document.getElementById('sd-supply-filter-port').value;
+            const tableBody = document.getElementById('sd-vessel-arrivals-table-body');
+            tableBody.innerHTML = '';
+            let filteredShipments = DUMMY_DATA.shipmentData.filter(s => s.commodity === commodity && s.ai_est_load_min !== undefined);
+            if (port) filteredShipments = filteredShipments.filter(s => s.destination === port);
+            
+            filteredShipments.sort((a,b) => new Date(a.eta) - new Date(b.eta)).forEach(s => {
+                const qtyEst = `${(s.ai_est_load_min/1000).toFixed(0)}-${(s.ai_est_load_max/1000).toFixed(0)}K MT`;
+                tableBody.innerHTML += `<tr><td>${s.vessel}</td><td>${s.eta}</td><td>${qtyEst}</td><td class="${s.weekly_change?.includes('+') ? 'supply-change-positive' : (s.weekly_change?.includes('-') ? 'supply-change-negative' : '')}">${s.weekly_change||'N/A'}</td><td class="${s.sentiment?.toLowerCase()==='bullish' ? 'supply-sentiment-bullish': (s.sentiment?.toLowerCase()==='bearish' ? 'supply-sentiment-bearish':'')}">${s.sentiment||'N/A'}</td><td>${s.origin||'N/A'}</td><td>${s.destination||'N/A'}</td></tr>`;
+            });
+             if (tableBody.children.length === 0) tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-light);">No vessel arrivals data.</td></tr>`;
+        }
+
+        function filterNewsFeedSD() { // For S&D Drivers
+            const commodity = currentSelectedSdCommodity; // Uses the S&D page's selected commodity
+            const geography = document.getElementById('sd-news-filter-geography').value;
+            const sortBy = document.getElementById('sd-news-sort-by').value;
+            const feedContainer = document.getElementById('sd-news-feed-content');
+            renderNewsItems(feedContainer, DUMMY_DATA.newsFeed[currentSdDriversNewsTab], commodity, geography, sortBy);
+        }
+
+        function renderTraderRecommendationsSD() {
+            const commodity = currentSelectedSdCommodity;
+            const trendsDiv = document.getElementById('sd-active-counterparty-trends');
+            trendsDiv.innerHTML = '';
+            (DUMMY_DATA.counterpartyTrends[commodity] || []).forEach(t => {
+                trendsDiv.innerHTML += `<div class="trader-insight-card"><h4>${t.name} (${t.type})</h4><p>${t.trend}</p></div>`;
+            });
+             if (trendsDiv.children.length === 0) trendsDiv.innerHTML = `<p style="text-align:center;color:var(--text-light);">No counterparty trends.</div>`;
+
+
+            const suggestions = DUMMY_DATA.tradeSuggestions[commodity];
+            const buyersDiv = document.getElementById('sd-suggested-buyers');
+            const sellersDiv = document.getElementById('sd-suggested-sellers');
+            buyersDiv.innerHTML = '<h4>Best to Sell To Right Now:</h4>';
+            sellersDiv.innerHTML = '<h4>Best to Buy From Right Now:</h4>';
+
+            if (suggestions) {
+                (suggestions.sellTo || []).forEach(s => buyersDiv.innerHTML += `<div class="trader-insight-card"><p><strong>${s.name}</strong> (Score: ${s.score}/100)</p><p class="reasoning">${s.reason}</p></div>`);
+                (suggestions.buyFrom || []).forEach(s => sellersDiv.innerHTML += `<div class="trader-insight-card"><p><strong>${s.name}</strong> (Score: ${s.score}/100)</p><p class="reasoning">${s.reason}</p></div>`);
+            }
+            if (buyersDiv.children.length <= 1) buyersDiv.innerHTML += `<p class="text-light">No specific sell recommendations.</p>`; // 1 because of H4
+            if (sellersDiv.children.length <= 1) sellersDiv.innerHTML += `<p class="text-light">No specific buy recommendations.</p>`;
+        }
+
+        function processMarketChatterSD() { // For S&D Drivers page
+            const chatterText = document.getElementById('sd-market-chatter-input').value;
+            if (!chatterText) return;
+            const commodity = currentSelectedSdCommodity;
+            const commonTags = extractTagsFromText(chatterText);
+            if (!commonTags.some(tag => tag.toLowerCase().includes(commodity.toLowerCase().split(" ")[0]))) { // Add commodity tag if not auto-detected
+                commonTags.push(`#Comm${commodity.split(" (")[0].replace(/\s/g, '')}`);
+            }
+
+            const note = { id: Date.now(), timestamp: getFormattedTimestamp(new Date().toISOString()), analyst: currentUser.name, content: chatterText, ai_tags: commonTags, type: "Internal Chatter", commodity: commodity, geography: commonTags.find(t=>t.startsWith("#Geo"))?.substring(4) || "Global", sentiment_score: Math.random() };
+            DUMMY_DATA.marketChatterLog.unshift(note);
+            DUMMY_DATA.newsFeed.internalChatter.unshift(note);
+            
+            document.getElementById('sd-ai-suggested-tags').innerHTML = commonTags.map(tag => `<span class="tag">${tag}</span>`).join('');
+            document.getElementById('sd-market-chatter-input').value = '';
+            filterNewsFeedSD(); // Refresh S&D news feed which includes internal chatter
+            if(currentVisibleSection === 'dashboard') filterNewsFeed(); // Update dashboard if visible
+            if(currentVisibleSection === 'analyst-workbench') renderRecentChatterNotes(); // Update analyst workbench if visible
+        }
+        
+        // --- Counterparty Directory ---
+        function renderCounterpartyDirectory() {
+            document.getElementById('counterparty-profile').style.display = 'none'; // Hide profile on initial load
+        }
+        function renderCounterpartyProfile() {
+            const cpName = document.getElementById('counterparty-select').value;
+            const cp = DUMMY_DATA.counterparties[cpName];
+            const profileDiv = document.getElementById('counterparty-profile');
+            if (!cp) { profileDiv.style.display = 'none'; return; }
+
+            document.getElementById('cp-profile-header').textContent = `${cp.name} (${cp.location}) - ${cp.type} - Risk: ${cp.internal_rating}`;
+            document.getElementById('cp-contact-details-list').innerHTML = `<li><strong>Contact:</strong> ${cp.contact_person||'N/A'}</li><li><strong>Email:</strong> ${cp.email||'N/A'}</li><li><strong>Phone:</strong> ${cp.phone||'N/A'}</li><li><strong>Address:</strong> ${cp.address||'N/A'}</li>`;
+            document.getElementById('cp-internal-assessment-list').innerHTML = `<li><strong>Overall Risk:</strong> ${cp.internal_rating}</li><li><strong>Payment History:</strong> ${cp.payment_history}</li><li><strong>Trade Volume (12M):</strong> ${formatCurrency(cp.total_trade_volume_12m)}</li><li><strong>Active Deals:</strong> ${cp.active_deals}</li><li><strong>Credit Limit:</strong> ${formatCurrency(cp.credit_limit)}</li><li><strong>Exposure:</strong> ${formatCurrency(cp.current_exposure)}</li>`;
+            document.getElementById('cp-external-intelligence-list').innerHTML = `<li><strong>D&B Rating:</strong> ${cp.dnb_score}/10</li><li><strong>Adverse Media:</strong> No significant flags (AI Scan)</li>`;
+            
+            const tradeHistoryBody = document.getElementById('cp-trade-history-body');
+            tradeHistoryBody.innerHTML = '';
+            DUMMY_DATA.deals.filter(d => d.counterparty === cpName).forEach(d => {
+                tradeHistoryBody.innerHTML += `<tr><td>${d.commodity}</td><td>${d.quantity_mt}</td><td>${formatCurrency(d.quantity_mt * d.price_usd_mt)}</td><td>${d.created_date}</td><td>${d.status}</td></tr>`;
+            });
+            if(tradeHistoryBody.children.length === 0) tradeHistoryBody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-light);">No trade history.</td></tr>`;
+
+            document.getElementById('cp-trade-nexus-list').innerHTML = `<li><strong>Primary Commodities:</strong> ${cp.primary_commodities_bought.join(', ')}</li><li><strong>Key Origins:</strong> ${cp.key_origins_historically.join(', ')}</li><li><strong>Recent Activity Shift:</strong> ${cp.recent_activity_shift}</li>`;
+            profileDiv.style.display = 'block';
+        }
+
+        // --- Arbitrage Tracker & Modal ---
+        function renderArbitrageTracker() {
+            const tableBody = document.getElementById('arbitrage-tracker-table-body');
+            tableBody.innerHTML = '';
+            DUMMY_DATA.arbitrageOpportunities.forEach(opp => {
+                tableBody.innerHTML += `<tr><td>${opp.commodity}</td><td>${opp.buyLegDetails.commodity.replace('Raw Cashew Nuts (RCN)','RCN')} ${opp.buyLegDetails.quality} ${opp.buyLegDetails.origin} ${opp.buyLegDetails.incoterm} @ $${opp.buyLegDetails.price}</td><td>${opp.sellLegDetails.commodity.replace('Raw Cashew Nuts (RCN)','RCN')} ${opp.sellLegDetails.quality} ${opp.sellLegDetails.destination} ${opp.sellLegDetails.incoterm} @ $${opp.sellLegDetails.price}</td><td>$${opp.supplyChainCosts}/MT</td><td>${opp.netArbitrage >= 0 ? '+' : ''}${formatCurrency(opp.netArbitrage)}</td><td>${opp.confidence}</td><td><button class="btn btn-primary btn-sm" onclick="openInitiateTradeModal('${opp.id}')">Initiate</button></td></tr>`;
+            });
+            if (tableBody.children.length === 0) tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-light);">No arbitrage opportunities.</td></tr>`;
+        }
+        function openInitiateTradeModal(oppId) {
+            selectedArbitrageOpp = DUMMY_DATA.arbitrageOpportunities.find(o => o.id === oppId);
+            if (!selectedArbitrageOpp) return;
+            document.getElementById('modal-arbitrage-opportunity-title').textContent = `Initiate Trade: ${selectedArbitrageOpp.commodity} ${selectedArbitrageOpp.origin} vs ${selectedArbitrageOpp.destination}`;
+            const partners = DUMMY_DATA.suggestedPartners[oppId];
+            const sellersList = document.getElementById('suggested-sellers-list');
+            const buyersList = document.getElementById('suggested-buyers-list');
+            sellersList.innerHTML = ''; buyersList.innerHTML = ''; selectedArbSeller = null; selectedArbBuyer = null;
+            (partners?.sellers || []).forEach(s => sellersList.innerHTML += `<div class="partner-item" onclick="selectArbPartner('seller', '${s.name}', this)"><strong>${s.name}</strong><br><small class="reasoning">${s.reason}</small></div>`);
+            (partners?.buyers || []).forEach(b => buyersList.innerHTML += `<div class="partner-item" onclick="selectArbPartner('buyer', '${b.name}', this)"><strong>${b.name}</strong><br><small class="reasoning">${b.reason}</small></div>`);
+            updateProceedToOrderButton();
+            document.getElementById('arbitrage-trade-modal').style.display = 'flex';
+        }
+        function closeArbitrageTradeModal() { document.getElementById('arbitrage-trade-modal').style.display = 'none'; }
+        function selectArbPartner(type, name, element) {
+            const listId = type === 'seller' ? 'suggested-sellers-list' : 'suggested-buyers-list';
+            document.querySelectorAll(`#${listId} .partner-item`).forEach(item => item.classList.remove('selected'));
+            element.classList.add('selected');
+            if (type === 'seller') selectedArbSeller = name; else selectedArbBuyer = name;
+            updateProceedToOrderButton();
+        }
+        function updateProceedToOrderButton() { document.getElementById('proceed-to-order-btn').disabled = !(selectedArbSeller && selectedArbBuyer); }
+        function proceedToOrderCreationFromArbitrage() {
+            if (!selectedArbitrageOpp || !selectedArbSeller || !selectedArbBuyer) return;
+            closeArbitrageTradeModal();
+            showSection('deal-creation');
+            // Pre-fill deal form
+            document.getElementById('deal-mandate-name').value = `Arbitrage: ${selectedArbitrageOpp.commodity} ${selectedArbitrageOpp.origin}-${selectedArbitrageOpp.destination}`;
+            document.getElementById('deal-mandate-type').value = "Buy"; // Assuming we are initiating the buy leg first
+            document.getElementById('deal-commodity').value = selectedArbitrageOpp.buyLegDetails.commodity;
+            populateDealQualityOriginOptions(); // Populate dependent dropdowns
+            document.getElementById('deal-quality').value = selectedArbitrageOpp.buyLegDetails.quality;
+            document.getElementById('deal-origin').value = selectedArbitrageOpp.buyLegDetails.origin;
+            document.getElementById('deal-quantity').value = 100; // Default quantity
+            document.getElementById('deal-price').value = selectedArbitrageOpp.buyLegDetails.price;
+            document.getElementById('deal-incoterm').value = selectedArbitrageOpp.buyLegDetails.incoterm;
+            document.getElementById('deal-destination').value = selectedArbitrageOpp.buyLegDetails.destination; // Or a transit point
+            document.getElementById('deal-counterparty-name').value = selectedArbSeller;
+            populateCounterpartyInfo();
+            // Could then auto-create a linked sell mandate or guide user
+            navigateToDealStep(2); // Move to counterparty step, as some info is prefilled
+        }
+
+        // --- Risk Dashboard ---
+        function renderRiskDashboard() {
+            const totalExposure = DUMMY_DATA.deals.reduce((sum, deal) => sum + (deal.quantity_mt * deal.price_usd_mt), 0);
+            document.getElementById('total-live-exposure').textContent = formatCurrency(totalExposure);
+
+            const expByComm = DUMMY_DATA.deals.reduce((acc, deal) => { acc[deal.commodity] = (acc[deal.commodity] || 0) + (deal.quantity_mt * deal.price_usd_mt); return acc; }, {});
+            document.getElementById('exposure-by-commodity-list').innerHTML = Object.entries(expByComm).map(([c, v]) => `<li>${c}: ${formatCurrency(v)}</li>`).join('');
+            
+            const expByRisk = DUMMY_DATA.deals.reduce((acc, deal) => { const r = DUMMY_DATA.counterparties[deal.counterparty]?.internal_rating || 'Unknown'; acc[r] = (acc[r] || 0) + (deal.quantity_mt * deal.price_usd_mt); return acc; }, {});
+            document.getElementById('exposure-by-risk-category-list').innerHTML = Object.entries(expByRisk).map(([r, v]) => `<li>${r}: ${formatCurrency(v)}</li>`).join('');
+
+            const cpExposureDiv = document.getElementById('counterparty-exposure-limits');
+            cpExposureDiv.innerHTML = '';
+            Object.values(DUMMY_DATA.counterparties).forEach(cp => {
+                const perc = cp.credit_limit ? (cp.current_exposure / cp.credit_limit * 100) : 0;
+                const barClass = perc > 90 ? 'red' : (perc > 70 ? 'orange' : 'green');
+                cpExposureDiv.innerHTML += `<div style="margin-bottom:10px;"><span style="font-weight:600;">${cp.name}:</span> ${formatCurrency(cp.current_exposure)} / ${formatCurrency(cp.credit_limit||0)} (${perc.toFixed(0)}%)<div class="progress-bar-container"><div class="progress-bar ${barClass}" style="width:${Math.min(perc,100)}%;"></div></div></div>`;
+            });
+        }
+        
+        // --- Supply Predictor ---
+        function renderSupplyPredictor() {
+            const port = document.getElementById('supply-filter-port').value;
+            const commodity = document.getElementById('supply-filter-commodity').value;
+            const tableBody = document.getElementById('vessel-arrivals-table-body');
+            tableBody.innerHTML = '';
+            let filtered = DUMMY_DATA.shipmentData.filter(s => s.ai_est_load_min !== undefined);
+            if (port) filtered = filtered.filter(s => s.destination === port || s.origin === port);
+            if (commodity) filtered = filtered.filter(s => s.commodity === commodity);
+            
+            filtered.sort((a,b) => new Date(a.eta) - new Date(b.eta)).forEach(s => {
+                const qtyEst = `${(s.ai_est_load_min/1000).toFixed(0)}-${(s.ai_est_load_max/1000).toFixed(0)}K MT`;
+                 tableBody.innerHTML += `<tr><td>${s.vessel}</td><td>${s.eta}</td><td>${s.commodity}</td><td>${qtyEst}</td><td class="${s.weekly_change?.includes('+') ? 'supply-change-positive' : (s.weekly_change?.includes('-') ? 'supply-change-negative' : '')}">${s.weekly_change||'N/A'}</td><td class="${s.sentiment?.toLowerCase()==='bullish' ? 'supply-sentiment-bullish': (s.sentiment?.toLowerCase()==='bearish' ? 'supply-sentiment-bearish':'')}">${s.sentiment||'N/A'}</td><td>${s.origin||'N/A'}</td><td>${s.destination||'N/A'}</td></tr>`;
+            });
+            if (tableBody.children.length === 0) tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--text-light);">No vessel data for filters.</td></tr>`;
+
+            document.getElementById('harvest-weather-list').innerHTML = `<li><strong>Ghana RCN:</strong> Main harvest ongoing. Favorable weather. Good outturn.</li><li><strong>IVC RCN:</strong> Recent rains in San Pedro. Minor quality impact possible.</li>`;
+        }
+
+        // --- Admin Panel ---
+        function renderAdminPanel() {
+            const displayDiv = document.getElementById('commodity-config-display');
+            displayDiv.innerHTML = '';
+            Object.entries(DUMMY_DATA.commoditiesConfig).forEach(([name, config]) => {
+                displayDiv.innerHTML += `<div class="widget" style="margin-bottom:10px;"><div class="widget-header"><h4>${name}</h4></div><div class="widget-content"><p><small>Sub-Var: ${config.sub_varieties.join(', ') || 'N/A'}<br>Origins: ${config.standard_origins.join(', ') || 'N/A'}<br>S&D: ${config.supply_demand_analysis?.substring(0,50)}...</small></p></div></div>`;
+            });
+            document.getElementById('add-commodity-form').onsubmit = handleAdminFormSubmit;
+        }
+        function handleAdminFormSubmit(event) {
+            event.preventDefault();
+            const feedbackEl = document.getElementById('admin-feedback');
+            try {
+                const name = document.getElementById('admin-commodity-name').value;
+                if (!name) { feedbackEl.textContent = 'Commodity Name is required.'; feedbackEl.className = 'alert-box error'; feedbackEl.style.display = 'block'; return; }
+                DUMMY_DATA.commoditiesConfig[name] = {
+                    full_name: name,
+                    short_name: name.split(' ').map(n=>n[0]).join('').toUpperCase().substring(0,3),
+                    sub_varieties: document.getElementById('admin-sub-varieties').value.split(',').map(s=>s.trim()).filter(Boolean),
+                    quality_params: JSON.parse(document.getElementById('admin-quality-params').value || '{}'),
+                    standard_origins: document.getElementById('admin-origins').value.split(',').map(s=>s.trim()).filter(Boolean),
+                    harvest_calendar: JSON.parse(document.getElementById('admin-harvest-calendar').value || '{}'),
+                    supply_demand_analysis: document.getElementById('admin-sd-analysis').value,
+                    typical_specs: JSON.parse(document.getElementById('admin-typical-specs').value || '{}'),
+                    expected_harvest_yoy: document.getElementById('admin-expected-harvest-yoy').value
+                };
+                feedbackEl.textContent = `Configuration for "${name}" saved!`;
+                feedbackEl.className = 'alert-box'; // Success style
+                feedbackEl.style.display = 'block';
+                document.getElementById('add-commodity-form').reset();
+                renderAdminPanel();
+                populateSharedFilters(); // Repopulate dropdowns if new commodity added
+            } catch (e) {
+                feedbackEl.textContent = 'Error saving configuration: ' + e.message;
+                feedbackEl.className = 'alert-box error';
+                feedbackEl.style.display = 'block';
+            }
+        }
+
+    </script>
+</body>
+</html>
